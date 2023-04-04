@@ -2,10 +2,12 @@
 
 namespace App\Repositories;
 
+use App\Models\BudgetPendingTask;
 use App\Models\Damage;
 use App\Models\Order;
 use App\Models\PendingTask;
 use App\Models\State;
+use App\Models\StateBudgetPendingTask;
 use App\Models\StatePendingTask;
 use App\Models\StatusDamage;
 use App\Models\SubState;
@@ -471,7 +473,7 @@ class PendingTaskRepository extends Repository
             });
     }
 
-    public function addPendingTaskFromIncidence($vehicleId, $taskId, $damage)
+    public function addPendingTaskFromIncidence($vehicleId, $taskId, $damage, $budgetPendingTasks = null)
     {
         $task = $this->taskRepository->getById([], $taskId);
         $vehicle = Vehicle::findOrFail($vehicleId);
@@ -489,8 +491,8 @@ class PendingTaskRepository extends Repository
 
             $damage->reception_id = $vehicle->lastReception->id;
             $damage->save();
-
-            PendingTask::create([
+            $pending_task= new PendingTask;
+            $pending_task->fill([
                 'vehicle_id' => $vehicleId,
                 'task_id' => $taskId,
                 'reception_id' => $vehicle->lastReception->id,
@@ -503,6 +505,20 @@ class PendingTaskRepository extends Repository
                 'approved' => true,
                 'user_id' => Auth::id()
             ]);
+            $pending_task->save();
+            if (!is_null( $budgetPendingTasks)) {
+                $budgetPendingTask = new BudgetPendingTask;
+                $budgetPendingTask->fill([
+                    'campa_id' => $pending_task->campa_id,
+                    'role_id' => $budgetPendingTasks['role_id'],
+                    'pending_task_id'=>$pending_task->id,
+                    'state_budget_pending_task_id'=> StateBudgetPendingTask::PENDING,
+                    'url'=>$budgetPendingTasks['url']
+                ]);
+                $budgetPendingTask->save();
+            }
+
+
         } else {
             $this->pendingAuthorizationRepository->create($vehicle->id, $task->id, $damage->id);
         }
