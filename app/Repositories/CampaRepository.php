@@ -53,4 +53,14 @@ class CampaRepository extends Repository {
         }
         return ["campa" => $campa];
     }
+
+    public function delete($id){
+        $campa = Campa::find($id);
+        if(!empty($campa)){
+            $campa->delete();
+            return [ 'message' => 'Campa deleted' ];
+        } else {
+            return [ 'message' => 'iMPOSSIBLE DELETE'];
+        }
+    }
 }
