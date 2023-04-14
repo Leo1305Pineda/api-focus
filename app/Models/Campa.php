@@ -11,6 +11,8 @@ use App\Traits\CoincidenceFilterTrait;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 /**
  * Class Campa
@@ -105,7 +107,7 @@ class Campa extends Model
      * )
      */
 
-    use HasFactory, Filterable, CoincidenceFilterTrait;
+    use HasFactory, Filterable, CoincidenceFilterTrait, SoftDeletes;
 
     const ROCIAUTO = 1;
     const VIAS_PALANTE = 2;
@@ -137,6 +139,10 @@ class Campa extends Model
         'address',
         'active',
         'ocupation'
+    ];
+
+    protected $dates = [
+        'deleted_at'
     ];
 
     public function users(){
