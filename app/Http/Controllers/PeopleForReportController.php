@@ -17,7 +17,7 @@ class PeopleForReportController extends Controller
 
     /**
     * @OA\Get(
-    *     path="/api/people-for-reports/getall",
+    *     path="/api/people-for-report",
     *     tags={"people-for-reports"},
     *     summary="Get all people for reports",
     *     security={

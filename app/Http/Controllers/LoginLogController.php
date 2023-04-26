@@ -18,7 +18,7 @@ class LoginLogController extends Controller
 
     /**
     * @OA\Get(
-    *     path="/api/login-logs/getall",
+    *     path="/api/login-logs",
     *     tags={"login-logs"},
     *     summary="Get all login logs",
     *     security={

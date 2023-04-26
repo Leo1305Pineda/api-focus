@@ -15,7 +15,7 @@ class OperationController extends Controller
 
     /**
     * @OA\Get(
-    *     path="/api/operations/getall",
+    *     path="/api/operations",
     *     tags={"operations"},
     *     summary="Get all type operations",
     *     security={

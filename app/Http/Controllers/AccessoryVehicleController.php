@@ -52,7 +52,7 @@ class AccessoryVehicleController extends Controller
     /**
      * @OA\Post(
      *     path="/api/accessory-vehicle",
-     *     tags={"accessory-vehicle"},
+     *     tags={"accessory-vehicles"},
      *     summary="Create accessory vehicle",
      *     security={
      *          {"bearerAuth": {}}
@@ -133,6 +133,21 @@ class AccessoryVehicleController extends Controller
     {
         return $this->createDataResponse($this->accessoryVehicleRepository->delete($request), Response::HTTP_CREATED);
     }
+
+    /**
+    * @OA\Get(
+    *     path="/api/accessory-vehicle/export",
+    *     tags={"acccessory-vehicles"},
+    *     summary="get accessory vehicles export",
+    *     @OA\Response(
+    *         response=200,
+    *         description="Successful operation",
+    *          @OA\MediaType(
+    *             mediaType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    *         ),
+    *     ),
+    * )
+    */
 
     public function export(Request $request)
     {

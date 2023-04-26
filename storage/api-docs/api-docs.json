@@ -493,7 +493,7 @@
             },
             "post": {
                 "tags": [
-                    "accessory-vehicle"
+                    "accessory-vehicles"
                 ],
                 "summary": "Create accessory vehicle",
                 "operationId": "createAccessoryVehicle",
@@ -584,6 +584,23 @@
                         "bearerAuth": []
                     }
                 ]
+            }
+        },
+        "/api/accessory-vehicle/export": {
+            "get": {
+                "tags": [
+                    "acccessory-vehicles"
+                ],
+                "summary": "get accessory vehicles export",
+                "operationId": "5bba563dcfeb54e321186456a7fe1b16",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {}
+                        }
+                    }
+                }
             }
         },
         "/api/auth/signin": {
@@ -3486,6 +3503,23 @@
                 ]
             }
         },
+        "/api/delivery-vehicles/export": {
+            "get": {
+                "tags": [
+                    "delivery-vehicles"
+                ],
+                "summary": "get delivery vehicles export",
+                "operationId": "de2e85f43232c51ff3683e62fc812d65",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": {}
+                        }
+                    }
+                }
+            }
+        },
         "/api/delivery-note-ald": {
             "get": {
                 "tags": [
@@ -3845,7 +3879,7 @@
         "/api/grouptasks": {
             "post": {
                 "tags": [
-                    "grouptasks"
+                    "group-tasks"
                 ],
                 "summary": "Create group task",
                 "operationId": "createGroupTask",
@@ -4565,7 +4599,7 @@
             },
             "post": {
                 "tags": [
-                    "comments"
+                    "incidence-images"
                 ],
                 "summary": "Create incidence image",
                 "operationId": "createIncidenceImage",
@@ -4847,13 +4881,13 @@
                 }
             }
         },
-        "/api/login-logs/getall": {
+        "/api/login-logs": {
             "get": {
                 "tags": [
                     "login-logs"
                 ],
                 "summary": "Get all login logs",
-                "operationId": "0dc95f4895f22c413d3210c003c1fecc",
+                "operationId": "66f943126a65b2ca6caad2f2f1e90fa0",
                 "parameters": [
                     {
                         "name": "per_page",
@@ -4896,9 +4930,7 @@
                         "bearerAuth": []
                     }
                 ]
-            }
-        },
-        "/api/login-logs": {
+            },
             "post": {
                 "tags": [
                     "login-logs"
@@ -5165,13 +5197,13 @@
                 ]
             }
         },
-        "/api/operations/getall": {
+        "/api/operations": {
             "get": {
                 "tags": [
                     "operations"
                 ],
                 "summary": "Get all type operations",
-                "operationId": "cd4dc946bd1a5462060d0a224f6a4358",
+                "operationId": "755af83e17207f2e1e8749c8c14febcc",
                 "parameters": [
                     {
                         "name": "with[]",
@@ -5206,6 +5238,41 @@
                     },
                     "500": {
                         "description": "An error has occurred."
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "operations"
+                ],
+                "summary": "Create operation",
+                "operationId": "createOperation",
+                "requestBody": {
+                    "description": "Create operation object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Operation"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Operation"
+                                }
+                            }
+                        }
                     }
                 },
                 "security": [
@@ -5303,50 +5370,13 @@
                 ]
             }
         },
-        "/api/operations": {
-            "post": {
-                "tags": [
-                    "operations"
-                ],
-                "summary": "Create operation",
-                "operationId": "createOperation",
-                "requestBody": {
-                    "description": "Create operation object",
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/Operation"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Operation"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/password-reset-codes/getall": {
+        "/api/password-reset-code": {
             "get": {
                 "tags": [
                     "password-reset-codes"
                 ],
                 "summary": "Get all password reset codes",
-                "operationId": "ec93216ddd0312fd3b5481d75aadbbfd",
+                "operationId": "af47caad045e2c55e7729bfc46204258",
                 "parameters": [
                     {
                         "name": "with[]",
@@ -5614,41 +5644,6 @@
                         "bearerAuth": []
                     }
                 ]
-            },
-            "post": {
-                "tags": [
-                    "pending-tasks"
-                ],
-                "summary": "Create pending task",
-                "operationId": "createPendingTask",
-                "requestBody": {
-                    "description": "Create pending task object",
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/PendingTask"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/PendingTask"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
             }
         },
         "/api/pending-tasks/filter": {
@@ -5735,78 +5730,6 @@
                 "responses": {
                     "200": {
                         "description": "Successful operation"
-                    },
-                    "500": {
-                        "description": "An error has occurred"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/pending-tasks/filter-download-file": {
-            "get": {
-                "tags": [
-                    "pending-tasks"
-                ],
-                "summary": "Get pending task filter download file",
-                "operationId": "4b4e3b61e63da4fee29abb5e7f8f22f2",
-                "parameters": [
-                    {
-                        "name": "with[]",
-                        "in": "query",
-                        "description": "A list of relatonship",
-                        "required": false,
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            },
-                            "example": [
-                                "task",
-                                "vehicle",
-                                "reception",
-                                "userStart",
-                                "userEnd",
-                                "statePendingTask",
-                                "groupTask"
-                            ]
-                        }
-                    },
-                    {
-                        "name": "per_page",
-                        "in": "query",
-                        "description": "Items per page",
-                        "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "example": 5
-                        }
-                    },
-                    {
-                        "name": "page",
-                        "in": "query",
-                        "description": "Page",
-                        "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "example": 1
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/PendingTaskPaginate"
-                                }
-                            }
-                        }
                     },
                     "500": {
                         "description": "An error has occurred"
@@ -6367,54 +6290,6 @@
                 ]
             }
         },
-        "/api/pending-tasks/update-approved": {
-            "post": {
-                "tags": [
-                    "pending-tasks"
-                ],
-                "summary": "Updated approved",
-                "operationId": "dac58b5765a49de6f0be408f490326b6",
-                "requestBody": {
-                    "description": "",
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "properties": {
-                                    "questionnaire_id": {
-                                        "type": "integer"
-                                    },
-                                    "task_id": {
-                                        "type": "integer"
-                                    },
-                                    "approved": {
-                                        "type": "boolean"
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/PendingTask"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
         "/api/pending-tasks/transfer": {
             "post": {
                 "tags": [
@@ -6470,13 +6345,13 @@
                 ]
             }
         },
-        "/api/people-for-reports/getall": {
+        "/api/people-for-report": {
             "get": {
                 "tags": [
                     "people-for-reports"
                 ],
                 "summary": "Get all people for reports",
-                "operationId": "f60848cc9bce9ee7ba2ae71c28e4792a",
+                "operationId": "b75ef5bf7ad85291672f8499c30c8959",
                 "parameters": [
                     {
                         "name": "with[]",
@@ -6927,7 +6802,12 @@
                     "404": {
                         "description": "Purchase operation not found"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
         "/api/purchase-operations/delete/{id}": {
@@ -7249,7 +7129,7 @@
         "/api/questions/{id}": {
             "delete": {
                 "tags": [
-                    "sub-states"
+                    "questions"
                 ],
                 "summary": "Delete question",
                 "operationId": "deleteQuestion",
@@ -7294,7 +7174,7 @@
         "/api/questionnaire/": {
             "get": {
                 "tags": [
-                    "questionnaire"
+                    "questionnaires"
                 ],
                 "summary": "Get all questionnaires",
                 "operationId": "2a7cbd43f9d089e46b14044453c530d0",
@@ -7397,6 +7277,63 @@
                     },
                     "404": {
                         "description": "Questionnaire not found."
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/questionnaire/approved": {
+            "post": {
+                "tags": [
+                    "questionnaires"
+                ],
+                "summary": "Approved available",
+                "operationId": "Approved",
+                "requestBody": {
+                    "description": "",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "questionnaire_id"
+                                ],
+                                "properties": {
+                                    "questionnaire_id": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Solicitud aprobada"
+                                        },
+                                        "vehicle": {
+                                            "$ref": "#/components/schemas/Vehicle"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable entity"
                     }
                 },
                 "security": [
@@ -11308,7 +11245,7 @@
         "/api/types-tasks/delete/{id}": {
             "delete": {
                 "tags": [
-                    "sub-states"
+                    "type-tasks"
                 ],
                 "summary": "Delete state",
                 "operationId": "deleteTypeTask",
@@ -11737,6 +11674,35 @@
                     },
                     "404": {
                         "description": "User not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/users/notifications": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get user notification",
+                "operationId": "d6df66c703ad5943c396b9cd2133a0f7",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserPaginate"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found."
                     }
                 },
                 "security": [
@@ -12431,9 +12397,7 @@
                             "type": "array",
                             "items": {
                                 "type": "string"
-                            },
-                            "example": [
-                            ]
+                            }
                         }
                     },
                     {
@@ -12598,70 +12562,6 @@
                 ]
             }
         },
-        "/api/vehicles/filter-download-file": {
-            "get": {
-                "tags": [
-                    "vehicles"
-                ],
-                "summary": "Get vehicle filter download file ",
-                "operationId": "a45088609799d1b1de43e7d1637ee610",
-                "parameters": [
-                    {
-                        "name": "with[]",
-                        "in": "query",
-                        "description": "A list of relatonship",
-                        "required": false,
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            },
-                            "example": [
-                                "task",
-                                "subState",
-                                "statePendingTask",
-                                "incidences",
-                                "budgetPendingTasks",
-                                "stateBudgetPendingTask"
-                            ]
-                        }
-                    },
-                    {
-                        "name": "per_page",
-                        "in": "query",
-                        "description": "Items per page",
-                        "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "example": 5
-                        }
-                    },
-                    {
-                        "name": "page",
-                        "in": "query",
-                        "description": "Page",
-                        "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "example": 1
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation"
-                    },
-                    "500": {
-                        "description": "An error has occurred"
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
         "/api/vehicles/reserved": {
             "get": {
                 "tags": [
@@ -12694,45 +12594,13 @@
                 ]
             }
         },
-        "/api/vehicles/totals/by-state'": {
+        "/api/vehicles/totals/by-state": {
             "get": {
                 "tags": [
                     "vehicles"
                 ],
                 "summary": "get total vehicle by state",
-                "operationId": "368a9ac34e7bfdceee8c20b066a6e45c",
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/Vehicle"
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Vehicle not found."
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/vehicles/request/defleet'": {
-            "get": {
-                "tags": [
-                    "vehicles"
-                ],
-                "summary": "get request defleet",
-                "operationId": "085711ff83e50673855d03ab70fa61a9",
+                "operationId": "a7a9e8d391de002723d7252ff31fa351",
                 "responses": {
                     "200": {
                         "description": "Successful operation",
@@ -12856,6 +12724,76 @@
                 ]
             }
         },
+        "/api/vehicles/change-sub-state": {
+            "post": {
+                "tags": [
+                    "vehicles"
+                ],
+                "summary": "Change substate",
+                "operationId": "changeSubStateVehicle",
+                "requestBody": {
+                    "description": "Change Vehicle Sub State",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/VehicleChangeSubState"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DeliveryNote"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/vehicles/update-sub-state/{id}": {
+            "put": {
+                "tags": [
+                    "vehicles"
+                ],
+                "summary": "Update sub state",
+                "operationId": "updateSubStateVehicle",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id that to be updated",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Vehicle not found"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/api/vehicles/set-vehicle-rented": {
             "post": {
                 "tags": [
@@ -12907,77 +12845,6 @@
                 ]
             }
         },
-        "/api/vehicles/defleet/{id}": {
-            "get": {
-                "tags": [
-                    "vehicles"
-                ],
-                "summary": "Get defleet by id",
-                "operationId": "dbfaa6fa47fd22bab1a97e70d215e2a5",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Vehicle"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Vehicle not found."
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/api/vehicles/undefleet/{id}": {
-            "get": {
-                "tags": [
-                    "vehicles"
-                ],
-                "summary": "Undefleet by id",
-                "operationId": "f757a566b4b84185db6961d8d0fb98e6",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful operation"
-                    },
-                    "404": {
-                        "description": "Defleet not found."
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
         "/api/defleeting": {
             "post": {
                 "tags": [
@@ -13019,6 +12886,52 @@
                                         }
                                     },
                                     "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/vehicles/comments": {
+            "post": {
+                "tags": [
+                    "vehicles"
+                ],
+                "summary": "Create vehicle comments",
+                "operationId": "createVehicleComments",
+                "requestBody": {
+                    "description": "Create Vehicle object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "vehicle_id": {
+                                        "type": "integer",
+                                        "format": "int64"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/VehicleCommentWithUser"
                                 }
                             }
                         }
@@ -14814,12 +14727,6 @@
                         "type": "integer",
                         "format": "int64"
                     },
-                    "group_task_id": {
-                        "title": "Group Task ID",
-                        "description": "Group Task ID",
-                        "type": "integer",
-                        "format": "int64"
-                    },
                     "damage_type_id": {
                         "title": "Type of Damage ID",
                         "description": "Type of Damage ID",
@@ -15814,6 +15721,57 @@
                     }
                 ]
             },
+            "Notification": {
+                "title": "Notification model",
+                "description": "Notification model",
+                "properties": {
+                    "id": {
+                        "title": "ID",
+                        "description": "ID",
+                        "type": "string"
+                    },
+                    "type": {
+                        "title": "Type",
+                        "description": "Type",
+                        "type": "string"
+                    },
+                    "notifiable_type": {
+                        "title": "Notifiable type",
+                        "description": "Notifiable type",
+                        "type": "string"
+                    },
+                    "notifiable_id": {
+                        "title": "Notifiable ID",
+                        "description": "Notifiable ID",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "data": {
+                        "title": "Data",
+                        "description": "Data",
+                        "type": "string"
+                    },
+                    "read_at": {
+                        "title": "Read at",
+                        "description": "When was readed",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "created_at": {
+                        "title": "Created at",
+                        "description": "When was created",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "title": "Updated at",
+                        "description": "When was last updated",
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
             "NotifyDamage": {
                 "title": "Notify Damage model",
                 "description": "Notify Damage model",
@@ -16236,12 +16194,6 @@
                     "user_end_id": {
                         "title": "User End ID",
                         "description": "User End ID",
-                        "type": "integer",
-                        "format": "int64"
-                    },
-                    "group_task_id": {
-                        "title": "Group Task ID",
-                        "description": "Group Task ID",
                         "type": "integer",
                         "format": "int64"
                     },
@@ -16856,10 +16808,10 @@
                         "type": "integer",
                         "format": "int64"
                     },
-                    "reception_id": {
-                        "title": "Reception ID",
-                        "description": "Reception ID",
-                        "type": "integer",
+                    "datetime_approved": {
+                        "title": "Datetime Approved",
+                        "description": "Datetime Approved",
+                        "type": "date",
                         "format": "int64"
                     },
                     "user_id": {
@@ -16955,12 +16907,6 @@
                     "type_model_order_id": {
                         "title": "Type of Model Order ID",
                         "description": "Type of Model Order ID",
-                        "type": "integer",
-                        "format": "int64"
-                    },
-                    "group_task_id": {
-                        "title": "Group Task ID",
-                        "description": "Group Task ID",
                         "type": "integer",
                         "format": "int64"
                     },
@@ -17689,12 +17635,6 @@
                     "pending_task_id": {
                         "title": "Pending Task ID",
                         "description": "Pending Task ID",
-                        "type": "integer",
-                        "format": "int64"
-                    },
-                    "group_task_id": {
-                        "title": "Group Task ID",
-                        "description": "Group Task ID",
                         "type": "integer",
                         "format": "int64"
                     },
@@ -18662,6 +18602,24 @@
                     }
                 ]
             },
+            "UserPaginate": {
+                "allOf": [
+                    {
+                        "properties": {
+                            "data": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/Notification"
+                                }
+                            }
+                        },
+                        "type": "object"
+                    },
+                    {
+                        "$ref": "#/components/schemas/Paginate"
+                    }
+                ]
+            },
             "Vehicle": {
                 "title": "Vehicle model",
                 "description": "Vehicle model",
@@ -19000,6 +18958,33 @@
                     }
                 ]
             },
+            "VehicleChangeSubState": {
+                "allOf": [
+                    {
+                        "properties": {
+                            "vehicles": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/Vehicle"
+                                }
+                            }
+                        },
+                        "type": "object"
+                    },
+                    {
+                        "type": "integer",
+                        "property": "type_delivery_note_id"
+                    },
+                    {
+                        "type": "integer",
+                        "property": "sub_state_id"
+                    },
+                    {
+                        "type": "object",
+                        "property": "data"
+                    }
+                ]
+            },
             "VehiclesByID": {
                 "allOf": [
                     {
@@ -19145,6 +19130,69 @@
                     },
                     {
                         "$ref": "#/components/schemas/Vehicle"
+                    }
+                ]
+            },
+            "VehicleComment": {
+                "title": "Vehicle Comment model",
+                "description": "Vehicle Comment model",
+                "properties": {
+                    "id": {
+                        "title": "ID",
+                        "description": "ID",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "vehicle_id": {
+                        "title": "Vehicle ID",
+                        "description": "Vehicle ID",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "reception_id": {
+                        "title": "Reception ID",
+                        "description": "Reception ID",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "user_id": {
+                        "title": "User ID",
+                        "description": "User ID",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "description": {
+                        "title": "Description",
+                        "description": "Description",
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "title": "Created at",
+                        "description": "When was created",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "title": "Updated at",
+                        "description": "When was last updated",
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "VehicleCommentWithUser": {
+                "allOf": [
+                    {
+                        "properties": {
+                            "user": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    {
+                        "$ref": "#/components/schemas/VehicleComment"
                     }
                 ]
             },
