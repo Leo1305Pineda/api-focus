@@ -117,7 +117,7 @@ class GroupTaskController extends Controller
     /**
      * @OA\Post(
      *     path="/api/grouptasks",
-     *     tags={"grouptasks"},
+     *     tags={"group-tasks"},
      *     summary="Create group task",
      *     security={
      *          {"bearerAuth": {}}

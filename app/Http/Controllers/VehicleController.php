@@ -812,7 +812,7 @@ class VehicleController extends Controller
 
     /**
     * @OA\Get(
-    *     path="/api/vehicles/totals/by-state'",
+    *     path="/api/vehicles/totals/by-state",
     *     tags={"vehicles"},
     *     summary="get total vehicle by state",
     *     security={
@@ -925,10 +925,62 @@ class VehicleController extends Controller
         return $this->getDataResponse($this->vehicleRepository->vehiclesByState($request), HttpFoundationResponse::HTTP_OK);
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/vehicles/change-sub-state",
+     *     tags={"vehicles"},
+     *     summary="Change substate",
+     *     security={
+     *          {"bearerAuth": {}}
+     *     },
+     *     operationId="changeSubStateVehicle",
+     *     @OA\Response(
+     *         response="201",
+     *         description="Successful operation",
+     *         @OA\JsonContent(ref="#/components/schemas/DeliveryNote"),
+     *     ),
+     *     @OA\RequestBody(
+     *         description="Change Vehicle Sub State",
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/VehicleChangeSubState"),
+     *     )
+     * )
+     */
+
     public function changeSubState(Request $request)
     {
         return $this->updateDataResponse($this->vehicleRepository->changeSubState($request), HttpFoundationResponse::HTTP_OK);
     }
+
+    /**
+     * @OA\Put(
+     *     path="/api/vehicles/update-sub-state/{id}",
+     *     tags={"vehicles"},
+     *     summary="Update sub state",
+     *     security={
+     *          {"bearerAuth": {}}
+     *     },
+     *     operationId="updateSubStateVehicle",
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="id that to be updated",
+     *         required=true,
+     *         @OA\Schema(
+     *             type="integer"
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\Items(ref="#/components/schemas/Vehicle")
+     *     ),
+     *     @OA\Response(
+     *         response="404",
+     *         description="Vehicle not found"
+     *     ),
+     * )
+     */
 
     public function updateSubStateVehicle($id)
     {
@@ -1016,6 +1068,38 @@ class VehicleController extends Controller
         }
         return $this->updateDataResponse($data, HttpFoundationResponse::HTTP_OK);
     }
+
+    /**
+     * @OA\Post(
+     *     path="/api/vehicles/comments",
+     *     tags={"vehicles"},
+     *     summary="Create vehicle comments",
+     *     security={
+     *          {"bearerAuth": {}}
+     *     },
+     *     operationId="createVehicleComments",
+     *     @OA\Response(
+     *         response="200",
+     *         description="Successful operation",
+     *         @OA\JsonContent(ref="#/components/schemas/VehicleCommentWithUser"),
+     *     ),
+     *     @OA\RequestBody(
+     *         description="Create Vehicle object",
+     *         required=true,
+     *         value = @OA\JsonContent(
+     *           @OA\Property(
+     *                  property="description",
+     *                  type="string",
+     *            ),
+     *            @OA\Property(
+     *                  property="vehicle_id",
+     *                  type="integer",
+     *                  format="int64"
+     *            )
+     *         ),
+     *     )
+     * )
+     */
 
     public function comments(Request $request) {
         $data = $this->vehicleRepository->comments($request->all());

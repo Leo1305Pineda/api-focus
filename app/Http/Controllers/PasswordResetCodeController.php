@@ -18,7 +18,7 @@ class PasswordResetCodeController extends Controller
 
     /**
     * @OA\Get(
-    *     path="/api/password-reset-codes/getall",
+    *     path="/api/password-reset-code",
     *     tags={"password-reset-codes"},
     *     summary="Get all password reset codes",
     *     security={

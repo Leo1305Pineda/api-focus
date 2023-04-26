@@ -158,6 +158,30 @@ class Vehicle extends Model
      *      },
      * )
      * @OA\Schema(
+     *      schema="VehicleChangeSubState",
+     *      allOf = {
+     *          @OA\Schema(
+     *              @OA\Property(
+     *                  property="vehicles",
+     *                  type="array",
+     *                  @OA\Items(ref="#/components/schemas/Vehicle"),
+     *              ),
+     *          ),
+     *          @OA\Property(
+     *              property="type_delivery_note_id",
+     *              type="integer",
+     *          ),
+     *          @OA\Property(
+     *              property="sub_state_id",
+     *              type="integer",
+     *          ),
+     *          @OA\Property(
+     *              property="data",
+     *              type="object",
+     *          ),
+     *      },
+     * )
+     * @OA\Schema(
      *      schema="VehiclesByID",
      *      allOf = {
      *          @OA\Schema(ref="#/components/schemas/Vehicle"),

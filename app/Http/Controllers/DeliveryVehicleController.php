@@ -209,6 +209,21 @@ class DeliveryVehicleController extends Controller
        return $this->deleteDataResponse($this->deliveryVehicleRepository->delete($id), Response::HTTP_OK);
     }
 
+    /**
+    * @OA\Get(
+    *     path="/api/delivery-vehicles/export",
+    *     tags={"delivery-vehicles"},
+    *     summary="get delivery vehicles export",
+    *     @OA\Response(
+    *         response=200,
+    *         description="Successful operation",
+    *          @OA\MediaType(
+    *             mediaType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    *         ),
+    *     ),
+    * )
+    */
+
     public function export(Request $request)
     {
         ini_set("memory_limit", "-1");

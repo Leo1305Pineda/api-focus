@@ -307,6 +307,25 @@ class UserController extends Controller
     public function getUsersByRole(Request $request, $role_id){
         return $this->getDataResponse($this->userRepository->getUsersByRole($request, $role_id), HttpFoundationResponse::HTTP_OK);
     }
+    /**
+    * @OA\Get(
+    *     path="/api/users/notifications",
+    *     tags={"users"},
+    *     summary="Get user notification",
+    *     security={
+    *          {"bearerAuth": {}}
+    *     },
+    *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(ref="#/components/schemas/UserPaginate"),
+     *     ),
+    *     @OA\Response(
+    *         response="404",
+    *         description="User not found."
+    *     )
+    * )
+    */
     public function notifications(Request $request){
         return $this->getDataResponse($this->userRepository->notifications($request), HttpFoundationResponse::HTTP_OK);
     }
