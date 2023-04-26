@@ -147,7 +147,7 @@ class TypeTaskController extends Controller
      * @OA\Delete(
      *     path="/api/types-tasks/delete/{id}",
      *     summary="Delete state",
-     *     tags={"sub-states"},
+     *     tags={"type-tasks"},
      *     operationId="deleteTypeTask",
      *     security={
      *          {"bearerAuth": {}}

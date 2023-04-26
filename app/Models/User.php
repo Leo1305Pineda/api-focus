@@ -229,6 +229,19 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      *          ),
      *      },
      * )
+     * @OA\Schema(
+     *      schema="UserPaginate",
+     *      allOf = {
+     *          @OA\Schema(ref="#/components/schemas/Paginate"),
+     *          @OA\Schema(
+     *              @OA\Property(
+     *                  property="data",
+     *                  type="array",
+     *                  @OA\Items(ref="#/components/schemas/Notification"),
+     *              ),
+     *          ),
+     *      },
+     * )
      */
 
     use Authenticatable, Authorizable, HasFactory, Notifiable;

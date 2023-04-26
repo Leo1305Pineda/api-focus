@@ -25,7 +25,7 @@ class PendingTaskController extends Controller
 
     /**
     * @OA\Get(
-    *     path="/api/pending-tasks",
+    *     path="/api/pending-tasks/getall",
     *     tags={"pending-tasks"},
     *     summary="Get all pending tasks",
     *     security={

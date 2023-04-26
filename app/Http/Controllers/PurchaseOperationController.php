@@ -112,6 +112,9 @@ class PurchaseOperationController extends Controller
      *     path="/api/purchase-operations/update/{id}",
      *     tags={"purchase-operations"},
      *     summary="Updated purchase operation",
+     *     security={
+     *          {"bearerAuth": {}}
+     *     },
      *     @OA\RequestBody(
      *         description="Updated purchase operation object",
      *         required=true,

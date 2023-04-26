@@ -78,7 +78,7 @@ class IncidenceImageController extends Controller
     /**
      * @OA\Post(
      *     path="/api/incidence-images",
-     *     tags={"comments"},
+     *     tags={"incidence-images"},
      *     summary="Create incidence image",
      *     security={
      *          {"bearerAuth": {}}

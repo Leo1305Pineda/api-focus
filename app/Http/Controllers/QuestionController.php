@@ -95,7 +95,7 @@ class QuestionController extends Controller
      * @OA\Delete(
      *     path="/api/questions/{id}",
      *     summary="Delete question",
-     *     tags={"sub-states"},
+     *     tags={"questions"},
      *     operationId="deleteQuestion",
      *     security={
      *          {"bearerAuth": {}}

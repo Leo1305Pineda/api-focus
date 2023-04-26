@@ -23,7 +23,7 @@ class QuestionnaireController extends Controller
     /**
     * @OA\Get(
     *     path="/api/questionnaire/",
-    *     tags={"questionnaire"},
+    *     tags={"questionnaires"},
     *     summary="Get all questionnaires",
     *     security={
     *          {"bearerAuth": {}}
