@@ -38,6 +38,7 @@ class DamageRepository extends Repository {
     }
 
     public function store($request){
+        $budgetPendingTasks = $request->input('budgetPendingTasks');
         $damage = Damage::create($request->all());
         $damage->user_id = Auth::id();
         $damage->vehicle_id = $request->input('vehicle_id');
@@ -50,7 +51,12 @@ class DamageRepository extends Repository {
         $isDamageTask = false;
 
         foreach($request->input('tasks') as $task){
-            $this->pendingTaskRepository->addPendingTaskFromIncidence($damage->vehicle_id, $task, $damage);
+            if (!!$budgetPendingTasks && $task == $budgetPendingTasks['task_id']){
+                $this->pendingTaskRepository->addPendingTaskFromIncidence($damage->vehicle_id, $task, $damage, $budgetPendingTasks);
+            } else {
+                $this->pendingTaskRepository->addPendingTaskFromIncidence($damage->vehicle_id, $task, $damage);
+            }
+
             $this->damageTaskRepository->create($damage->id, $task);
             $isDamageTask = true;
         }
