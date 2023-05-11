@@ -51,4 +51,14 @@ class BrandRepository extends Repository {
         return $brand;
     }
 
+    public function delete($id){
+        $brand = Brand::find($id);
+        if(!empty($brand)){
+            $brand->delete();
+            return [ 'message' => 'Brand deleted' ];
+        } else {
+            return [ 'message' => 'iMPOSSIBLE DELETE'];
+        }
+    }
+
 }

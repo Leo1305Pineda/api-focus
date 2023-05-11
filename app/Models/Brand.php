@@ -5,7 +5,7 @@ namespace App\Models;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Brand
@@ -55,10 +55,14 @@ class Brand extends Model
      */
 
 
-    use HasFactory, Filterable;
+    use HasFactory, Filterable, SoftDeletes;
 
     protected $fillable = [
         'name'
+    ];
+
+    protected $dates = [
+        'deleted_at'
     ];
 
     public function vehicleModels(){
