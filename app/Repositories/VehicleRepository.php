@@ -11,6 +11,7 @@ use App\Models\TradeState;
 use App\Models\Vehicle;
 use App\Models\StatePendingTask;
 use App\Models\StatusDamage;
+use App\Models\Task;
 use App\Models\TypeModelOrder;
 use App\Models\VehicleComment;
 use DateTime;
@@ -130,7 +131,7 @@ class VehicleRepository extends Repository
                     unset($pending_task['reception_id']);
                     unset($pending_task['question_answer_id']);
                     unset($pending_task['id']);
-                    $_reception = Reception::where([ 
+                    $_reception = Reception::where([
                         'vehicle_id' => $_vehicle->id,
                         'created_at' => Carbon::parse($reception['created_at'])->toDateTimeString()
                     ])->first();
@@ -152,9 +153,9 @@ class VehicleRepository extends Repository
                 DB::table('accessory_vehicle')->insert($accessory);
             }
 
-//           
+//
 
-           
+
 
             /* $existVehicle = Vehicle::where('plate', $vehicle['plate'])
                 ->first();
@@ -311,7 +312,7 @@ class VehicleRepository extends Repository
                 Questionnaire::where('reception_id', $vehicle->lastReception->id)->delete();
             }
             $vehicle->delete();
-        
+
             DB::commit();
             return ['message' => 'Vehicle deleted'];
         } catch (Exception $e) {
@@ -571,10 +572,43 @@ class VehicleRepository extends Repository
             $vehicle->sub_state_id = SubState::DEFLEETED;
             $vehicle->save();
         } else {
-            $vehicle->datetime_defleeting = null;
-            $vehicle->sub_state_id = null;
-            $vehicle->save();
-            $this->stateChangeRepository->updateSubStateVehicle($vehicle);
+            if ($vehicle->type_model_order_id === TypeModelOrder::ALDFLEX){
+                if(!is_null($vehicle->lastReception->lastQuestionnaire)){
+                    $questionnaire = $vehicle->lastReception->lastQuestionnaire;
+                    $questionnaire->datetime_approved = null;
+                    $questionnaire->save();
+                }
+                $pendingTasks= $vehicle->lastReception->pendingTasks()
+                ->where('task_id','<>', Task::VALIDATE_CHECKLIST)
+                ->where('approved', 1)
+                ->where(function($q){
+                    $q->where('state_pending_task_id', '<>', StatePendingTask::FINISHED)
+                    ->orWHereNull('state_pending_task_id');
+                })
+                ->get();
+                foreach($pendingTasks as $pt) {
+                    $pt->user_start_id = $pt->user_start_id ?? Auth::id();
+                    $pt->user_end_id = $pt->user_end_id ?? Auth::id();
+                    $pt->datetime_start = $pt->datetime_start ?? Carbon::now();
+                    $pt->datetime_finish = $pt->datetime_finish ?? Carbon::now();
+                    $pt->state_pending_task_id  =  StatePendingTask::FINISHED;
+                    $pt->save();
+                }
+                $pendingTask = $vehicle->lastReception->pendingTasks()->where('task_id', Task::VALIDATE_CHECKLIST)->first();
+                $pendingTask->state_pending_task_id  =  StatePendingTask::PENDING;
+                $pendingTask->user_end_id = null;
+                $pendingTask->datetime_finish = null;
+                $pendingTask->save();
+
+                $vehicle->datetime_defleeting = null;
+                $vehicle->sub_state_id = SubState::CHECK;
+                $vehicle->save();
+            } else {
+                $vehicle->datetime_defleeting = null;
+                $vehicle->sub_state_id = null;
+                $vehicle->save();
+                $this->stateChangeRepository->updateSubStateVehicle($vehicle);
+            }
         }
         return $vehicle;
     }
