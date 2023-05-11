@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Filters;
 
@@ -44,10 +44,20 @@ class QuestionnaireFilter extends ModelFilter
     }
 
     public function isApproved($value) {
+        // $query = $this->whereHas('vehicle', function ($query) use ($value) {
+        //     if ($value) {
+        //         $query->whereNotNull('datetime_defleeting');
+        //     }
+        //     $query->whereNull('datetime_defleeting');
+        // });
         if ($value) {
-            return $this->whereNotNull('datetime_approved');
+            return $this->whereNotNull('datetime_approved')->whereHas('vehicle', function ($query){
+                $query->whereNull('datetime_defleeting');
+            });
         }
-        return $this->whereNull('datetime_approved');
+        return $this->whereNull('datetime_approved')->whereHas('vehicle', function ($query){
+            $query->whereNull('datetime_defleeting');
+        });
     }
 
     public function isDefleeting($value) {
