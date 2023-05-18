@@ -167,4 +167,8 @@ class BrandController extends Controller
     public function update(Request $request, $id){
         return $this->updateDataResponse($this->brandRepository->update($request, $id), HttpFoundationResponse::HTTP_OK);
     }
+
+    public function delete($id){
+        return $this->deleteDataResponse($this->brandRepository->delete($id), HttpFoundationResponse::HTTP_OK);
+    }
 }
