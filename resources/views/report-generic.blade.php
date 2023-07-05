@@ -7,7 +7,6 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Hola!</h1>
     <h2>{{$title}}</h2>
     <p>{{$sub_title}}</p>
     <div>{!! isset($body) ? $body : '' !!}</div>
