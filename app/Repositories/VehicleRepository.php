@@ -594,7 +594,7 @@ class VehicleRepository extends Repository
                     $pt->state_pending_task_id  =  StatePendingTask::FINISHED;
                     $pt->save();
                 }
-                $pendingTask = $vehicle->lastReception->allPendingTasks()->where('task_id', Task::VALIDATE_CHECKLIST)->first();
+                $pendingTask = $vehicle->lastReception->pendingTasks()->where('task_id', Task::VALIDATE_CHECKLIST)->first();
                 $pendingTask->state_pending_task_id  =  StatePendingTask::PENDING;
                 $pendingTask->user_end_id = null;
                 $pendingTask->datetime_finish = null;
