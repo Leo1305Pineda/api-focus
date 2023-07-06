@@ -260,7 +260,9 @@ class Reception extends Model
     public function historyLocations(){
         return $this->hasMany(HistoryLocation::class);
     }
-
+    public function allPendingTasks() {
+        return $this->hasMany(PendingTask::class);
+    }
 
     public function pendingTasks() {
         return $this->hasMany(PendingTask::class)

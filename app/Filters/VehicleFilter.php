@@ -352,6 +352,7 @@ class VehicleFilter extends ModelFilter
     {
         $user = Auth::user();
         $campas_user_ids = implode(',',collect(CampaUser::where('user_id', $user->id)->get()->pluck('campa_id'))->toArray());
+        $campas_user_ids = $campas_user_ids ?? "''";
         $sql = <<<SQL
             Select max(r.id) from receptions r where r.vehicle_id = vehicles.id
         SQL;
