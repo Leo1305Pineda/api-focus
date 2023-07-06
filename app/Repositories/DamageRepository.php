@@ -67,7 +67,7 @@ class DamageRepository extends Repository {
 
         foreach($request->input('roles') as $role){
             $this->damageRoleRepository->create($damage->id, $role);
-            if(env('APP_ENV') == 'production') {
+            if(env('APP_ENV') == 'production' && !env('DISABLED_SEND_MAIL', false)) {
                 $this->notificationMail->build($role, $damage->id);
             }
         }
