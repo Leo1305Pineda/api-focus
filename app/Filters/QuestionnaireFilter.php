@@ -3,6 +3,7 @@
 namespace App\Filters;
 
 use EloquentFilter\ModelFilter;
+use Illuminate\Support\Facades\DB;
 
 class QuestionnaireFilter extends ModelFilter
 {
