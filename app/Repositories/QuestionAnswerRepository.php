@@ -165,7 +165,8 @@ class QuestionAnswerRepository
                 $vehicle = Vehicle::find($request->input('vehicle_id'));
                 $vehicle->has_environment_label = $has_environment_label;
                 $vehicle->save();
-                $this->stateChangeRepository->updateSubStateVehicle($vehicle);
+                $param_sub_state_id = $vehicle->sub_state_id === SubState::DEFLEETED ?  SubState::CHECK :  null ;
+                $this->stateChangeRepository->updateSubStateVehicle($vehicle, $param_sub_state_id);
             } else if ($vehicle->lastReception) {
                 $vehicle->lastReception->created_at = date('Y-m-d H:i:s');
                 $vehicle->lastReception->updated_at = date('Y-m-d H:i:s');
