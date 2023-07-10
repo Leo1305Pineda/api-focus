@@ -394,6 +394,8 @@ class VehicleRepository extends Repository
         $reception->save();
 
         $vehicle = Vehicle::find($vehicle_id);
+        $vehicle->campa_id = $campa_force ?? $vehicle->campa_id;
+        $vehicle->save();
 
         return $vehicle->lastReception;
     }
