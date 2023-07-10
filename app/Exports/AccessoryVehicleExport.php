@@ -22,7 +22,6 @@ class AccessoryVehicleExport implements FromCollection, WithMapping, WithHeading
 
     public function map($deliveryVehicle): array
     {
-        $data = json_decode($deliveryVehicle->data_delivery);
         return [
             $this->fixTime($deliveryVehicle->created_at),
             $deliveryVehicle->accessory->name ?? null,

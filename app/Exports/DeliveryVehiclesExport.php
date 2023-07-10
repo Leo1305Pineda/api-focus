@@ -22,7 +22,12 @@ class DeliveryVehiclesExport implements FromCollection, WithMapping, WithHeading
 
     public function map($deliveryVehicle): array
     {
-        $data = json_decode($deliveryVehicle->data_delivery);
+        if (is_array($deliveryVehicle->data_delivery)) {
+            $data = (object)$deliveryVehicle->data_delivery;
+        } else {
+            $data = json_decode($deliveryVehicle->data_delivery);
+        }
+
         return [
             $this->fixTime($deliveryVehicle->created_at),
             $deliveryVehicle->campa->name ?? null,
