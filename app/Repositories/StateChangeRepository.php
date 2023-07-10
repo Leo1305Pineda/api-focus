@@ -38,7 +38,7 @@ class StateChangeRepository extends Repository
                     $ald_sub_state_id = count($vehicle->lastReception->pendingTasks) === 0 ? SubState::CHECK_RELEASE : SubState::CAMPA;
                     $sub_state_type_model_order = $vehicle->type_model_order_id === TypeModelOrder::ALDFLEX ? $ald_sub_state_id : SubState::CAMPA;
                     $sub_state_id = $param_sub_state_id ?? $sub_state_type_model_order;
-                }                    
+                }
             } else {
                 $pendingTask = $approvedPendingTasks[0];
                 $sub_state_id = $pendingTask->task->sub_state_id;
@@ -64,6 +64,8 @@ class StateChangeRepository extends Repository
                         $reception->type_model_order_id = $vehicle->type_model_order_id;
                         $reception->save();
                     }
+                } elseif ($param_sub_state_id === SubState::CHECK){
+                    $sub_state_id = $param_sub_state_id;
                 }
             }
         }
