@@ -51,11 +51,14 @@ class QuestionnaireFilter extends ModelFilter
         //     $query->whereNull('datetime_defleeting');
         // });
         if ($value) {
-            return $this->whereNotNull('datetime_approved')->whereHas('vehicle', function ($query){
+            return $this->whereNotNull('datetime_approved')
+            ->whereHas('vehicle', function ($query){
                 $query->whereNull('datetime_defleeting');
             });
         }
-        return $this->whereNull('datetime_approved')->whereHas('vehicle', function ($query){
+        return $this->whereNull('datetime_approved')
+        ->whereRaw(DB::raw('reception_id = (Select max(r.id) from receptions r where r.vehicle_id = questionnaires.vehicle_id)'))
+        ->whereHas('vehicle', function ($query){
             $query->whereNull('datetime_defleeting');
         });
     }
