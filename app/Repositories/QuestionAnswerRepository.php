@@ -53,8 +53,8 @@ class QuestionAnswerRepository
 
             $questionnaire = null;
             $vehicle = Vehicle::findOrFail($request->input('vehicle_id'));
-
-            if (!is_null($vehicle->lastReception->lastQuestionnaire) && $vehicle->sub_state_id !== SubState::ALQUILADO) {
+            $notDefleetAndDelivery = Vehicle::where('id',$request->input('vehicle_id'))->filter(['defleetAndDelivery'=>1])->exists();
+            if (!is_null($vehicle->lastReception->lastQuestionnaire) && $vehicle->sub_state_id !== SubState::ALQUILADO &&  $notDefleetAndDelivery) {
                 return [
                     'questionnaire' => $vehicle->lastReception->lastQuestionnaire
                 ];
