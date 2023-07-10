@@ -231,6 +231,6 @@ class DeliveryVehicleController extends Controller
         $date = microtime(true);
         $array = explode('.', $date);
         ob_clean();
-        return Excel::download(new DeliveryVehiclesExport($request->all()), 'Salidas-' . date('d-m-Y') . '-' . $array[0] . '.xlsx');
+        return Excel::download(new DeliveryVehiclesExport($request), 'Salidas-' . date('d-m-Y') . '-' . $array[0] . '.xlsx');
     }
 }

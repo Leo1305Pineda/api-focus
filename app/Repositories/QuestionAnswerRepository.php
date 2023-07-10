@@ -53,10 +53,11 @@ class QuestionAnswerRepository
 
             $questionnaire = null;
             $vehicle = Vehicle::findOrFail($request->input('vehicle_id'));
-
-            if (!is_null($vehicle->lastReception->lastQuestionnaire) && $vehicle->sub_state_id !== SubState::ALQUILADO) {
+            $defleetAndDelivery = Vehicle::where('id',$request->input('vehicle_id'))->filter(['defleetAndDelivery'=>0])->exists();
+            if (!is_null($vehicle->lastReception->lastQuestionnaire) && $vehicle->sub_state_id !== SubState::ALQUILADO &&  !$defleetAndDelivery) {
                 return [
-                    'questionnaire' => $vehicle->lastReception->lastQuestionnaire
+                    'questionnaire' => $vehicle->lastReception->lastQuestionnaire,
+                    'message'=>'1'
                 ];
             }
 
@@ -162,14 +163,17 @@ class QuestionAnswerRepository
                 $this->vehicleRepository->updateBack($request);
 
                 $vehicle = Vehicle::find($request->input('vehicle_id'));
+                $vehicle->datetime_defleeting = $vehicle->sub_state_id === SubState::DEFLEETED ? null : $vehicle->datetime_defleeting;
                 $vehicle->has_environment_label = $has_environment_label;
                 $vehicle->save();
-                $this->stateChangeRepository->updateSubStateVehicle($vehicle);
+                $param_sub_state_id = $vehicle->sub_state_id === SubState::DEFLEETED ?  SubState::CHECK :  null ;
+                $this->stateChangeRepository->updateSubStateVehicle($vehicle, $param_sub_state_id);
             } else if ($vehicle->lastReception) {
                 $vehicle->lastReception->created_at = date('Y-m-d H:i:s');
                 $vehicle->lastReception->updated_at = date('Y-m-d H:i:s');
                 $vehicle->lastReception->save();
-                $sub_state_id = $vehicle->sub_state_id === SubState::DEFLEETED ? $vehicle->sub_state_id : SubState::CAMPA;
+                //$sub_state_id = $vehicle->sub_state_id === SubState::DEFLEETED ? $vehicle->sub_state_id : SubState::CAMPA;
+                $sub_state_id = SubState::CAMPA;
                 $this->stateChangeRepository->updateSubStateVehicle($vehicle, null, $sub_state_id);
             }
 
@@ -208,7 +212,8 @@ class QuestionAnswerRepository
 
             DB::commit();
             return [
-                'questionnaire' => $questionnaire
+                'questionnaire' => $questionnaire,
+                'message'=>'2'
             ];
         } catch (Exception $e) {
             DB::rollBack();

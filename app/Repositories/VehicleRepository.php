@@ -374,7 +374,7 @@ class VehicleRepository extends Repository
         return $vehicle;
     }
 
-    public function newReception($vehicle_id, $force = false)
+    public function newReception($vehicle_id, $force = false, $campa_force = null)
     {
         $vehicle = Vehicle::find($vehicle_id);
         $vehicle_ids = collect(Vehicle::where('id', $vehicle->id)->filter(['defleetingAndDelivery' => 0])->get())->map(function ($item) {
@@ -386,7 +386,7 @@ class VehicleRepository extends Repository
             $reception = $vehicle->lastReception;
         }
 
-        $reception->campa_id = $vehicle->campa_id;
+        $reception->campa_id = $campa_force ?? $vehicle->campa_id;
         $reception->vehicle_id = $vehicle_id;
         $reception->finished = false;
         $reception->has_accessories = false;
@@ -394,6 +394,8 @@ class VehicleRepository extends Repository
         $reception->save();
 
         $vehicle = Vehicle::find($vehicle_id);
+        $vehicle->campa_id = $campa_force ?? $vehicle->campa_id;
+        $vehicle->save();
 
         return $vehicle->lastReception;
     }
@@ -594,7 +596,7 @@ class VehicleRepository extends Repository
                     $pt->state_pending_task_id  =  StatePendingTask::FINISHED;
                     $pt->save();
                 }
-                
+
                 $pendingTask = $vehicle->lastReception->pendingTasks()->where('task_id', Task::VALIDATE_CHECKLIST)->first();
                 if (!!$pendingTask) {
                     $pendingTask->state_pending_task_id  =  StatePendingTask::PENDING;

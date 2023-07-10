@@ -55,7 +55,7 @@ class StockVehicles extends Mailable
               //  'lastReceptionCreatedAtFrom' => Carbon::now('Europe/Madrid')->startOfDay()->timezone('UTC')->format('Y-m-d H:i:s'),
               //  'lastReceptionCreatedAtTo' => Carbon::now('Europe/Madrid')->endOfDay()->timezone('UTC')->format('Y-m-d H:i:s')
             ]);
-            $file = Excel::download(new StockVehiclesExport($arr), 'entradas.xlsx')->getFile();
+            $file = Excel::download(new StockVehiclesExport(collect($arr)), 'entradas.xlsx')->getFile();
             rename($file->getRealPath(), $file->getPath() . '/' . 'stock-vehículos.xlsx');
             $fileRename1 = $file->getPath() . '/stock-vehículos.xlsx';
 
@@ -63,13 +63,13 @@ class StockVehicles extends Mailable
             rename($file->getRealPath(), $file->getPath() . '/' . 'entries.xlsx');
             $fileRename2 = $file->getPath() . '/entries.xlsx';
 
-            $file = Excel::download(new DeliveryVehiclesExport([
+            $file = Excel::download(new DeliveryVehiclesExport(collect([
                 'pendindTaskNull' => 0,
                 'vehicleDeleted' => 0,
                 'campaIds' => [$campa->id],
                 'createdAtFrom' => Carbon::now('Europe/Madrid')->startOfDay()->timezone('UTC')->format('Y-m-d H:i:s'),
                 'createdAtTo' => Carbon::now('Europe/Madrid')->endOfDay()->timezone('UTC')->format('Y-m-d H:i:s')
-            ]), 'entradas.xlsx')->getFile();
+            ])), 'entradas.xlsx')->getFile();
 
             rename($file->getRealPath(), $file->getPath() . '/' . 'deliveries.xlsx');
             $fileRename3 = $file->getPath() . '/deliveries.xlsx';
@@ -104,7 +104,7 @@ class StockVehicles extends Mailable
                 return $builder->where('role_id', Role::GLOBAL_MANAGER);
             })
             ->get();
-        
+
         $arr = collect([
                 'statesNotIds' => [4, 5, 10],
                 'defleetingAndDelivery' => 1,
@@ -121,12 +121,12 @@ class StockVehicles extends Mailable
         $fileRename2 = $file->getPath() . '/entries.xlsx';
 
 
-        $file = Excel::download(new DeliveryVehiclesExport([
+        $file = Excel::download(new DeliveryVehiclesExport(collect([
             'pendindTaskNull' => 0,
             'vehicleDeleted' => 0,
             'createdAtFrom' => Carbon::now('Europe/Madrid')->startOfDay()->timezone('UTC')->format('Y-m-d H:i:s'),
             'createdAtTo' => Carbon::now('Europe/Madrid')->endOfDay()->timezone('UTC')->format('Y-m-d H:i:s')
-        ]), 'entradas.xlsx')->getFile();
+        ])), 'entradas.xlsx')->getFile();
 
         rename($file->getRealPath(), $file->getPath() . '/' . 'deliveries.xlsx');
         $fileRename3 = $file->getPath() . '/deliveries.xlsx';

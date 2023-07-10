@@ -129,7 +129,7 @@ class ReportsCommand extends Command
             $this->info(print_r($data, true));
             Mail::send('report-generic', $data, function ($message) use ($item) {
                 $message->to(env('APP_ENV') == 'production' ? $item->email : env('MAIL_FROM_ADDRESS', 'focus@grupomobius.com'), 'Reporte ALD');
-                $message->subject('Repprte ALD');
+                $message->subject(env('APP_ENV') == 'production' ? 'Reporte ALD': 'Reporte ALD (TESTING)');
                 $message->from('no-reply.focus@grupomobius.com', 'Focus');
             });
         });
