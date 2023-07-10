@@ -72,7 +72,7 @@ class AldController extends Controller
     public function createTaskVehiclesAvalible(Request $request)
     {
         try {
-            $this->vehicleRepository->newReception($request->input('vehicle_id'));
+            $this->vehicleRepository->newReception($request->input('vehicle_id'), null,$request->input('campa_id') );
             $vehicle = Vehicle::findOrFail($request->input('vehicle_id'));
             if (!!$request->input('return_workshop_external')) {
                 $vehicle->sub_state_id = null;

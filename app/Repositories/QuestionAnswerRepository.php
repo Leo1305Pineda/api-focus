@@ -163,6 +163,7 @@ class QuestionAnswerRepository
                 $this->vehicleRepository->updateBack($request);
 
                 $vehicle = Vehicle::find($request->input('vehicle_id'));
+                $vehicle->datetime_defleeting = $vehicle->sub_state_id === SubState::DEFLEETED ? null : $vehicle->datetime_defleeting;
                 $vehicle->has_environment_label = $has_environment_label;
                 $vehicle->save();
                 $param_sub_state_id = $vehicle->sub_state_id === SubState::DEFLEETED ?  SubState::CHECK :  null ;
