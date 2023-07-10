@@ -56,7 +56,8 @@ class QuestionAnswerRepository
             $defleetAndDelivery = Vehicle::where('id',$request->input('vehicle_id'))->filter(['defleetAndDelivery'=>0])->exists();
             if (!is_null($vehicle->lastReception->lastQuestionnaire) && $vehicle->sub_state_id !== SubState::ALQUILADO &&  !$defleetAndDelivery) {
                 return [
-                    'questionnaire' => $vehicle->lastReception->lastQuestionnaire
+                    'questionnaire' => $vehicle->lastReception->lastQuestionnaire,
+                    'message'=>'1'
                 ];
             }
 
@@ -209,7 +210,8 @@ class QuestionAnswerRepository
 
             DB::commit();
             return [
-                'questionnaire' => $questionnaire
+                'questionnaire' => $questionnaire,
+                'message'=>'2'
             ];
         } catch (Exception $e) {
             DB::rollBack();
