@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Reception;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -24,7 +25,7 @@ class EntriesVehiclesExport implements FromCollection, WithMapping, WithHeadings
     {
         Log::debug($reception);
         return [
-            date('d/m/Y'),
+            $this->fixTime($reception->created_at),
             $reception->vehicle->typeModelOrder->name ?? null,
             $reception->vehicle->vin ?? null,
             $reception->vehicle->plate ?? null,
@@ -47,5 +48,11 @@ class EntriesVehiclesExport implements FromCollection, WithMapping, WithHeadings
             'Campa',
             'Versión'
         ];
+    }
+    public function fixTime($date) {
+        if ($date) {
+            return (new  Carbon($date))->addHours(2)->format('d/m/Y H:m:i');
+        }
+        return $date;
     }
 }
