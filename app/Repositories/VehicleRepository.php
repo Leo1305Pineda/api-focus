@@ -592,21 +592,6 @@ class VehicleRepository extends Repository
                         }
                     }
                 }
-                // $pendingTasks= $vehicle->lastReception->pendingTasks()
-                // ->where('task_id','<>', Task::VALIDATE_CHECKLIST)
-                // ->where(function($q){
-                //     $q->where('state_pending_task_id', '<>', StatePendingTask::FINISHED)
-                //     ->orWHereNull('state_pending_task_id');
-                // })
-                // ->get();
-                // foreach($pendingTasks as $pt) {
-                //     $pt->user_start_id = null;
-                //     $pt->user_end_id = null;
-                //     $pt->datetime_start = null;
-                //     $pt->datetime_finish = null;
-                //     $pt->state_pending_task_id  =  null;
-                //     $pt->save();
-                // }
 
                 $pendingTask = $vehicle->lastReception->allPendingTasks()
                 ->where('task_id', Task::VALIDATE_CHECKLIST)
