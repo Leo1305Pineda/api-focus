@@ -579,25 +579,39 @@ class VehicleRepository extends Repository
                     $questionnaire = $vehicle->lastReception->lastQuestionnaire;
                     $questionnaire->datetime_approved = null;
                     $questionnaire->save();
+                    foreach ($questionnaire->questionAnswers as $key => $questionAnswer) {
+                        if (!!$questionAnswer->response && !!$questionAnswer->task_id && !!$questionAnswer->pendingTask){
+                            $pending_task = $questionAnswer->pendingTask;
+                            $pending_task->approved = $questionAnswer->response;
+                            $pending_task->user_start_id = null;
+                            $pending_task->user_end_id = null;
+                            $pending_task->datetime_start = null;
+                            $pending_task->datetime_finish = null;
+                            $pending_task->state_pending_task_id  =  null;
+                            $pending_task->save();
+                        }
+                    }
                 }
-                $pendingTasks= $vehicle->lastReception->pendingTasks()
-                ->where('task_id','<>', Task::VALIDATE_CHECKLIST)
-                ->where('approved', 1)
-                ->where(function($q){
-                    $q->where('state_pending_task_id', '<>', StatePendingTask::FINISHED)
-                    ->orWHereNull('state_pending_task_id');
-                })
-                ->get();
-                foreach($pendingTasks as $pt) {
-                    $pt->user_start_id = $pt->user_start_id ?? Auth::id();
-                    $pt->user_end_id = $pt->user_end_id ?? Auth::id();
-                    $pt->datetime_start = $pt->datetime_start ?? Carbon::now();
-                    $pt->datetime_finish = $pt->datetime_finish ?? Carbon::now();
-                    $pt->state_pending_task_id  =  StatePendingTask::FINISHED;
-                    $pt->save();
-                }
+                // $pendingTasks= $vehicle->lastReception->pendingTasks()
+                // ->where('task_id','<>', Task::VALIDATE_CHECKLIST)
+                // ->where(function($q){
+                //     $q->where('state_pending_task_id', '<>', StatePendingTask::FINISHED)
+                //     ->orWHereNull('state_pending_task_id');
+                // })
+                // ->get();
+                // foreach($pendingTasks as $pt) {
+                //     $pt->user_start_id = null;
+                //     $pt->user_end_id = null;
+                //     $pt->datetime_start = null;
+                //     $pt->datetime_finish = null;
+                //     $pt->state_pending_task_id  =  null;
+                //     $pt->save();
+                // }
 
-                $pendingTask = $vehicle->lastReception->allPendingTasks()->where('task_id', Task::VALIDATE_CHECKLIST)->first();
+                $pendingTask = $vehicle->lastReception->allPendingTasks()
+                ->where('task_id', Task::VALIDATE_CHECKLIST)
+                ->latest()
+                ->first();
                 if (!!$pendingTask) {
                     $pendingTask->state_pending_task_id  =  StatePendingTask::PENDING;
                     $pendingTask->approved  = 1;
