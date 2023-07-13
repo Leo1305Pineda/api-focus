@@ -135,6 +135,11 @@ class QuestionAnswer extends Model
     public function task(){
         return $this->belongsTo(Task::class);
     }
+
+    public function pendingTask(){
+        return $this->hasOne(PendingTask::class);
+    }
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
