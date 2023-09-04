@@ -506,7 +506,7 @@ class PendingTaskRepository extends Repository
                 'user_id' => Auth::id()
             ]);
             $pending_task->save();
-            if (!is_null( $budgetPendingTasks)) {
+            if (!is_null( $budgetPendingTasks) && !!$budgetPendingTasks?->url) {
                 $budgetPendingTask = new BudgetPendingTask;
                 $budgetPendingTask->fill([
                     'campa_id' => $pending_task->campa_id,
