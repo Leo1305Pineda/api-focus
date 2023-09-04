@@ -506,16 +506,18 @@ class PendingTaskRepository extends Repository
                 'user_id' => Auth::id()
             ]);
             $pending_task->save();
-            if (!is_null( $budgetPendingTasks) && !!$budgetPendingTasks?->url) {
-                $budgetPendingTask = new BudgetPendingTask;
-                $budgetPendingTask->fill([
-                    'campa_id' => $pending_task->campa_id,
-                    'role_id' => $budgetPendingTasks['role_id'],
-                    'pending_task_id'=>$pending_task->id,
-                    'state_budget_pending_task_id'=> StateBudgetPendingTask::PENDING,
-                    'url'=>$budgetPendingTasks['url']
-                ]);
-                $budgetPendingTask->save();
+            if (!is_null( $budgetPendingTasks)) {
+                if (!!$budgetPendingTasks['url']) {
+                    $budgetPendingTask = new BudgetPendingTask;
+                    $budgetPendingTask->fill([
+                        'campa_id' => $pending_task->campa_id,
+                        'role_id' => $budgetPendingTasks['role_id'],
+                        'pending_task_id'=>$pending_task->id,
+                        'state_budget_pending_task_id'=> StateBudgetPendingTask::PENDING,
+                        'url'=>$budgetPendingTasks['url']
+                    ]);
+                    $budgetPendingTask->save();
+                }
             }
 
 
