@@ -112,9 +112,19 @@ class PendingTaskFilter extends ModelFilter
         return $this->whereDate('datetime_start','<=', $dateTime);
     }
 
+    public function dateTimeStart($dateTime)
+    {
+        return $this->whereDate('datetime_start', $dateTime);
+    }
+
     public function dateTimeEndFrom($dateTime)
     {
         return $this->whereDate('datetime_finish','>=', $dateTime);
+    }
+
+    public function dateTimeEnd($dateTime)
+    {
+        return $this->whereDate('datetime_finish', $dateTime);
     }
 
     public function dateTimeEndTo($dateTime)
