@@ -11,6 +11,12 @@ use Illuminate\Support\Facades\DB;
 
 class PendingTaskFilter extends ModelFilter
 {
+    protected function relatedDate($relation, $column, $value)
+    {
+        return $this->whereHas($relation, function ($query) use ($column, $value) {
+            $query->whereDate($column, $value);
+        });
+    }
     public function vehicles($ids){
         return $this->byVehicleIds($ids);
     }
@@ -89,7 +95,7 @@ class PendingTaskFilter extends ModelFilter
 
     public function createdAt($dateTime)
     {
-        return $this->whereDate('created_at', $dateTime);
+        return $this->relatedDate('reception', 'created_at', $dateTime);
     }
 
     public function createdAtFrom($dateTime)
@@ -197,5 +203,7 @@ class PendingTaskFilter extends ModelFilter
         }
         return $this->whereIn('vehicle_id', $vehicle_ids);
     }
+
+    
 
 }
