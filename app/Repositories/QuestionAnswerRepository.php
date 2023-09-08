@@ -76,7 +76,7 @@ class QuestionAnswerRepository
                 $questionnaire->reception_id = $vehicle->lastReception->id;
                 $questionnaire->save();
                 $questions = $request->input('questions');
-                $has_environment_label = null;
+                $has_environment_label = $vehicle->has_environment_label;
                 foreach ($questions as $question) {
                     $questionAnswer = new QuestionAnswer();
                     $questionAnswer->questionnaire_id = $questionnaire['id'];
