@@ -17,6 +17,20 @@ class PendingTaskFilter extends ModelFilter
             $query->whereDate($column, $value);
         });
     }
+
+    protected function relatedDateFrom($relation, $column, $fromDate)
+    {
+        return $this->whereHas($relation, function ($query) use ($column, $fromDate) {
+            $query->where($column, '>=',$fromDate);
+        });
+    }
+    protected function relatedDateTo($relation, $column, $toDate)
+    {
+        return $this->whereHas($relation, function ($query) use ($column, $toDate) {
+            $query->where($column, '<=',$toDate);
+        });
+    }
+
     public function vehicles($ids){
         return $this->byVehicleIds($ids);
     }
@@ -96,6 +110,26 @@ class PendingTaskFilter extends ModelFilter
     public function createdAt($dateTime)
     {
         return $this->relatedDate('reception', 'created_at', $dateTime);
+    }
+
+    public function receptionFrom($dateTime)
+    {
+        return $this->relatedDateFrom('reception', 'receptions.created_at', $dateTime);
+    }
+
+    public function receptionTo($dateTime)
+    {
+        return $this->relatedDateTo('reception', 'receptions.created_at', $dateTime);
+    }
+
+    public function exitFrom($dateTime)
+    {
+        return $this->relatedDateFrom('lastDeliveryVehicle', 'delivery_vehicles.created_at', $dateTime);
+    }
+
+    public function exitTo($dateTime)
+    {
+        return $this->relatedDateTo('lastDeliveryVehicle', 'delivery_vehicles.created_at', $dateTime);
     }
 
     public function createdAtFrom($dateTime)
