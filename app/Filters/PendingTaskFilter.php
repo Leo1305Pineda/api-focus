@@ -21,13 +21,13 @@ class PendingTaskFilter extends ModelFilter
     protected function relatedDateFrom($relation, $column, $fromDate)
     {
         return $this->whereHas($relation, function ($query) use ($column, $fromDate) {
-            $query->where($column, '>=',$fromDate);
+            $query->whereDate($column, '>=',$fromDate);
         });
     }
     protected function relatedDateTo($relation, $column, $toDate)
     {
         return $this->whereHas($relation, function ($query) use ($column, $toDate) {
-            $query->where($column, '<=',$toDate);
+            $query->whereDate($column, '<=',$toDate);
         });
     }
 
