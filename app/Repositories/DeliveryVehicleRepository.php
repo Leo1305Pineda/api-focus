@@ -33,7 +33,7 @@ class DeliveryVehicleRepository extends Repository
     {
         $user = User::with('campas')
             ->findOrFail(Auth::id());
-        $vehicle = Vehicle::findOrFail($vehicleId);        
+        $vehicle = Vehicle::findOrFail($vehicleId);
         $pending_task = PendingTask::updateOrCreate([
             'vehicle_id' => $vehicleId,
             'reception_id' => $vehicle->lastReception->id ?? null,
@@ -52,7 +52,7 @@ class DeliveryVehicleRepository extends Repository
         ]);
         DeliveryVehicle::create([
             'vehicle_id' => $vehicleId,
-            'campa_id' => $user->campas[0]->id,
+            'campa_id' => !!$data?->force_exit_from_campa ? $data?->force_exit_from_campa_id : $user->campas[0]->id,
             'delivery_note_id' => $deliveryNoteId,
             'data_delivery' => json_encode($data),
             'delivery_by' => $user->name,
