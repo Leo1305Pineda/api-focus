@@ -128,6 +128,8 @@ class Task extends Model
     const CHECK_BLOCKED = 61;
     const CHECK_RELEASE = 64;
     const RECEPTION = 68;
+    const FUEL_DIESEL = 51;
+    const FUEL_GASOLINE = 54;
 
     protected $fillable = [
         'company_id',
