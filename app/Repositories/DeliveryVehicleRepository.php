@@ -52,7 +52,7 @@ class DeliveryVehicleRepository extends Repository
         ]);
         DeliveryVehicle::create([
             'vehicle_id' => $vehicleId,
-            'campa_id' => !!$data?->force_exit_from_campa ? $data?->force_exit_from_campa_id : $user->campas[0]->id,
+            'campa_id' => key_exists("force_exit_from_campa",$data)  ? $data["force_exit_from_campa_id"] : $user->campas[0]->id,
             'delivery_note_id' => $deliveryNoteId,
             'data_delivery' => json_encode($data),
             'delivery_by' => $user->name,
