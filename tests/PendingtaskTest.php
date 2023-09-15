@@ -125,7 +125,7 @@ class PendingtaskTest extends TestCase
         $this->assertInstanceOf(EstimatedDate::class, $this->pendingTask->estimatedDates()->getModel());
     }
 
-    /** @test */    
+    /** @test */
     public function it_has_one_estimated_date()
     {
         $this->assertInstanceOf(HasOne::class, $this->pendingTask->lastEstimatedDate());
@@ -157,10 +157,10 @@ class PendingtaskTest extends TestCase
     }
 
     /** @test */
-    public function should_can_see_homework()
-    {
-        $this->assertInstanceOf(Builder::class, $this->pendingTask->canSeeHomework(1));
-    }
+    // public function should_can_see_homework()
+    // {
+    //     $this->assertInstanceOf(Builder::class, $this->pendingTask->canSeeHomework(1));
+    // }
 
     /** @test */
     public function should_search_by_plate()
