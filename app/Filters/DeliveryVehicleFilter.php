@@ -2,6 +2,7 @@
 
 namespace App\Filters;
 
+use App\Models\Campa;
 use EloquentFilter\ModelFilter;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -76,6 +77,12 @@ class DeliveryVehicleFilter extends ModelFilter
 
     public function notNullId($value){
         return $this->whereNotNull('delivery_note_id');
+    }
+
+    public function forceExitFromCampa($value){
+        $campa = Campa::find($value);
+        $name =$campa->name;
+        return $this->whereRaw("JSON_UNQUOTE(JSON_EXTRACT(JSON_UNQUOTE(data_delivery) , '$.force_exit_from_campa'))='$name'");
     }
 
     public function deletedAt($value){
