@@ -521,9 +521,15 @@ class PendingTask extends Model
                 ->orWhere('state_pending_task_id', StatePendingTask::IN_PROGRESS);
     }
 
-    public function scopeCanSeeHomework($query, int $userTypeId){
-        return $query->whereHas('task.subState.type_users_app', function ($query) use($userTypeId) {
-            return $query->where('type_user_app_id', $userTypeId);
+    public function scopeCanSeeHomework($query, $user){
+        return $query->whereHas('task.subState.type_users_app', function ($query) use($user) {
+            return $query->where(function($where)use($user){
+                $where->where('type_user_app_id', $user['type_user_app_id'])
+                ->when(in_array(3, $user->campas->pluck('id')->toArray()) && ($user['type_user_app_id'] == 3), function($q){ // solo para leganes
+                    $tasks = [Task::FUEL_DIESEL, Task::FUEL_GASOLINE];
+                    return $q->orWhereIn('task_id',$tasks);
+                });
+            });
         });
     }
 

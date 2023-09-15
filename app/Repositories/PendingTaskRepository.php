@@ -23,6 +23,7 @@ use App\Repositories\IncidencePendingTaskRepository;
 use App\Repositories\PendingAuthorizationRepository as RepositoriesPendingAuthorizationRepository;
 use Carbon\Carbon;
 use DateTime;
+use Illuminate\Support\Facades\DB;
 
 class PendingTaskRepository extends Repository
 {
@@ -90,7 +91,7 @@ class PendingTaskRepository extends Repository
             $query->byCampas($user->campas->pluck('id')->toArray());
         } else {
             $query->byCampas($user->campas->pluck('id')->toArray())
-                ->canSeeHomework($user['type_user_app_id']);
+                ->canSeeHomework($user);
         }
         return $query->get();
     }
