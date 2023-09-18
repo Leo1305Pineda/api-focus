@@ -23,6 +23,11 @@ use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 class AldController extends Controller
 {
 
+    protected $taskRepository;
+    protected $stateChangeRepository;
+    protected $vehicleRepository;
+    protected $squareRepository;
+
     public function __construct(
         TaskRepository $taskRepository,
         StateChangeRepository $stateChangeRepository,
@@ -131,6 +136,10 @@ class AldController extends Controller
                 $pending_task->user_start_id = Auth::id();
                 $pending_task->user_end_id = Auth::id();
                 $pending_task->order = -1;
+            }
+
+            if ($request->input('commentary')) {
+                $pending_task->comment_state = $request->input('commentary');
             }
 
             $pending_task->save();
