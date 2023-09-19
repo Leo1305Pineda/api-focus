@@ -15,6 +15,8 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 class PendingTaskExport implements FromCollection, WithMapping, WithHeadings
 {
 
+    protected $request;
+    
     public function __construct($request)
     {
         $this->request = $request;
@@ -33,7 +35,7 @@ class PendingTaskExport implements FromCollection, WithMapping, WithHeadings
             AND pt.reception_id = pending_tasks.reception_id
         ) as last_delivered_pending_task_id
     SQL;
-        return PendingTask::select(['datetime_pending', 'datetime_start', 'datetime_finish', 'observations', 'vehicle_id', 'task_id', 'total_paused', 'reception_id', 'state_pending_task_id'])
+        return PendingTask::select(['datetime_pending', 'datetime_start', 'datetime_finish', 'observations', 'vehicle_id', 'task_id', 'reception_id', 'state_pending_task_id'])
             ->selectRaw(DB::raw($sql))
             ->with(array(
                 'vehicle' => function ($query) {
@@ -126,7 +128,7 @@ class PendingTaskExport implements FromCollection, WithMapping, WithHeadings
                 $time_pending === 0 ? '0' : $time_pending,
                 $data->user_start?->name ?? null,
                 $data->user_end?->name ?? null,
-                round(($data->total_paused / 60), 4),
+                $data->total_paused,
                 $data->reception?->typeModelOrder?->name,
                 $this->dateFormat($data->vehicle->lastDeliveryVehicle?->created_at),
                 $data->estimatedDates?->pluck('estimated_date')->implode(',') ?? null,

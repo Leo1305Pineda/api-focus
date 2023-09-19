@@ -28,6 +28,19 @@ use Illuminate\Support\Facades\DB;
 class PendingTaskRepository extends Repository
 {
 
+    protected $taskReservationRepository;
+    protected $taskRepository;
+    protected $userRepository;
+    protected $incidenceRepository;
+    protected $vehicleRepository;
+    protected $receptionRepository;
+    protected $pendingTaskCanceledRepository;
+    protected $incidencePendingTaskRepository;
+    protected $pendingAuthorizationRepository;
+    protected $stateChangeRepository;
+    protected $squareRepository;
+    protected $historyLocationRepository;
+
     public function __construct(
         TaskReservationRepository $taskReservationRepository,
         TaskRepository $taskRepository,
@@ -139,7 +152,6 @@ class PendingTaskRepository extends Repository
     {
         if ($request->state_pending_task_id == StatePendingTask::PENDING) {
             $pending_task->datetime_pause = new DateTime();
-            $pending_task->total_paused += $this->diffDateTimes($pending_task->datetime_start);
             $oldOrder = $pending_task->order;
             $nextPendingTask = PendingTask::where('reception_id', $pending_task->reception_id)
                 ->where('approved', true)
@@ -156,16 +168,6 @@ class PendingTaskRepository extends Repository
                 $nextPendingTask->save();
             }
         }
-    }
-
-    private function diffDateTimes($datetime)
-    {
-        $datetime1 = new DateTime($datetime);
-        $diference = date_diff($datetime1, new DateTime());
-        $minutes = $diference->days * 24 * 60;
-        $minutes += $diference->h * 60;
-        $minutes += $diference->i;
-        return $minutes;
     }
 
     private function realignPendingTask($pendingTask)
@@ -253,9 +255,9 @@ class PendingTaskRepository extends Repository
             ->findOrFail($request->input('pending_task_id'));
         $vehicle = $this->getVehicleById($pending_task->vehicle_id);
         if ($pending_task->state_pending_task_id == StatePendingTask::PENDING) {
+            $pending_task->user_start_id = Auth::id();
             $pending_task->state_pending_task_id = StatePendingTask::IN_PROGRESS;
             $pending_task->datetime_start = date('Y-m-d H:i:s');
-            $pending_task->user_start_id = Auth::id();
             $pending_task->save();
             $vehicle = $this->stateChangeRepository->updateSubStateVehicle($vehicle);
             if (!is_null($vehicle->square)) {
@@ -302,11 +304,10 @@ class PendingTaskRepository extends Repository
         $pending_task = PendingTask::findOrFail($request->input('pending_task_id'));
         $vehicle = $pending_task->vehicle;
         if ($pending_task->state_pending_task_id == StatePendingTask::IN_PROGRESS) {
+            $pending_task->user_end_id = Auth::id();
             $pending_task->state_pending_task_id = StatePendingTask::FINISHED;
             $pending_task->order = -1;
-            $pending_task->user_end_id = Auth::id();
             $pending_task->datetime_finish = date('Y-m-d H:i:s');
-            $pending_task->total_paused += $this->diffDateTimes($pending_task->datetime_start);
             $pending_task->save();
             $reception = $pending_task->reception;
             if ($reception) {
@@ -352,6 +353,7 @@ class PendingTaskRepository extends Repository
                 $pending_task->datetime_start = date('Y-m-d H:i:s');
                 $pending_task->datetime_finish = date('Y-m-d H:i:s');
                 $pending_task->user_end_id = Auth::id();
+                $pending_task->user_start_id = Auth::id();
                 $pending_task->save();
                 $vehicle = $this->stateChangeRepository->updateSubStateVehicle($vehicle);
                 if ($vehicle->sub_state_id !== SubState::DEFLEETED) {

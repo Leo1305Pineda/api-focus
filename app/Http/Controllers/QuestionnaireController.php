@@ -15,6 +15,8 @@ use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 class QuestionnaireController extends Controller
 {
 
+    protected $questionnaireRepository;
+    
     public function __construct(QuestionnaireRepository $questionnaireRepository)
     {
         $this->questionnaireRepository = $questionnaireRepository;

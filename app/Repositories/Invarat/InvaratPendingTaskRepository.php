@@ -66,10 +66,9 @@ class InvaratPendingTaskRepository extends Repository {
             ->findOrFail($request->input('pending_task_id'));
 
         if ($pending_task->state_pending_task_id == StatePendingTask::PENDING) {
-
+            $pending_task->user_start_id = Auth::id();
             $pending_task->state_pending_task_id = StatePendingTask::IN_PROGRESS;
             $pending_task->datetime_start = date('Y-m-d H:i:s');
-            $pending_task->user_start_id = Auth::id();
 
             if($pending_task->save()){
 
