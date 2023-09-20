@@ -10,12 +10,16 @@ use App\Models\Task;
 use App\Models\Vehicle;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class QuestionnaireRepository extends Repository
 {
 
+    protected $stateChangeRepository;
+    protected  $notificationDAMail;
+    
     public function __construct(
         StateChangeRepository $stateChangeRepository,
         NotificationDAMail $notificationDAMail
@@ -67,7 +71,6 @@ class QuestionnaireRepository extends Repository
                 $data_update =  [
                     'state_pending_task_id' => StatePendingTask::FINISHED,
                     'user_id' => Auth::id(),
-                    'user_start_id' => Auth::id(),
                     'user_end_id' => Auth::id(),
                     'duration' => 0,
                     'approved' => true,
@@ -84,6 +87,7 @@ class QuestionnaireRepository extends Repository
                     $pendingTask->datetime_pending = Carbon::now();
                 }
                 if (is_null($pendingTask->datetime_start)) {
+                    $pendingTask->user_start_id = Auth::id();
                     $pendingTask->datetime_start = Carbon::now();
                 }
                 $pendingTask->save();

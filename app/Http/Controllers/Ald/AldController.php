@@ -165,7 +165,7 @@ class AldController extends Controller
 
             if (count($vehicle->lastReception->approvedPendingTasks) > 0 && $vehicle->lastReception->approvedPendingTasks[0]->task_id == Task::CHECK_BLOCKED) {
                 $approvedPendingTask = $vehicle->lastReception->approvedPendingTasks[0];
-
+                $approvedPendingTask->user_start_id = Auth::id();
                 $approvedPendingTask->state_pending_task_id = StatePendingTask::IN_PROGRESS;
                 $approvedPendingTask->datetime_start = date('Y-m-d H:i:s');
                 $approvedPendingTask->save();

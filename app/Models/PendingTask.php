@@ -9,6 +9,7 @@ use App\Models\Task;
 use App\Models\StatePendingTask;
 use App\Models\GroupTask;
 use App\Models\Incidence;
+use Carbon\Carbon;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -416,6 +417,16 @@ class PendingTask extends Model
         'user_id'
     ];
 
+    protected $appends = ['total_paused'];
+
+    public function getTotalPausedAttribute()
+    {
+        $datetime_start = Carbon::parse($this->datetime_start);
+        $datetime_finish = Carbon::parse($this->datetime_finish);
+        $diffS = $datetime_start->diffInSeconds($datetime_finish);
+        return gmdate('H:i:s', $diffS);
+    }
+ 
     public function vehicle(){
         return $this->belongsTo(Vehicle::class);
     }

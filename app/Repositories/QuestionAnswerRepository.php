@@ -15,12 +15,24 @@ use App\Models\Task;
 use App\Models\TypeModelOrder;
 use App\Models\User;
 use App\Models\Vehicle;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class QuestionAnswerRepository
 {
+
+    protected $taskRepository;
+    protected $questionnaireRepository;
+    protected $receptionRepository;
+    protected $pendingTaskRepository;
+    protected $vehicleRepository;
+    protected $notificationDAMail;
+    protected $notificationItvMail;
+    protected $stateChangeRepository;
+    protected $squareRepository;
+    protected $vehiclePictureRepository;
 
     public function __construct(
         TaskRepository $taskRepository,
@@ -138,6 +150,11 @@ class QuestionAnswerRepository
                     $pending_task->task_id = $task['task_id'];
                     $pending_task->approved = $task['approved'];
                     $pending_task->created_from_checklist = true;
+
+                    if ($task['task_id'] === Task::VALIDATE_CHECKLIST) {
+                        $pending_task->user_start_id = Auth::id();
+                        $pending_task->datetime_start = date('Y-m-d H:i:s');
+                    }
 
                     $question_answer = QuestionAnswer::where('task_id', $task['task_id'])
                         ->where('questionnaire_id', $questionnaire->id)->first();
