@@ -423,7 +423,7 @@ class PendingTask extends Model
     {
         $datetime_start = Carbon::parse($this->datetime_start);
         $datetime_finish = Carbon::parse($this->datetime_finish);
-        $diffD = $datetime_start->diffInDays($datetime_finish);
+        $diffD = $datetime_start->diffInDays($datetime_finish) || '';
         $diffS = $datetime_start->diffInSeconds($datetime_finish);
         $gmdate = gmdate('H:i:s', $diffS);
         return "$diffD $gmdate";
