@@ -64,6 +64,9 @@ class TypeModelOrder extends Model
     const DEVOLUTION = 6;
     const VO = 7;
     const VO_ENTREGADO = 8;
+    const ALDFLEX_NUEVO = 9;
+    const ALDFLEX_VN = 11;
+    const ALDFLEX_REACOND = 12;
 
     protected $fillable = [
         'name'
