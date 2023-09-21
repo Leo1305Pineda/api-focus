@@ -130,6 +130,7 @@ class Task extends Model
     const RECEPTION = 68;
     const FUEL_DIESEL = 51;
     const FUEL_GASOLINE = 54;
+    const PREVENTIVE = 71;
 
     protected $fillable = [
         'company_id',
