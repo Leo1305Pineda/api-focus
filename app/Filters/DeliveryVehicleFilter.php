@@ -85,10 +85,11 @@ class DeliveryVehicleFilter extends ModelFilter
         return $this->whereRaw("JSON_UNQUOTE(JSON_EXTRACT(JSON_UNQUOTE(data_delivery) , '$.force_exit_from_campa'))='$name'");
     }
     public function forceExitToCampa($value){
-        return $this->whereRaw("JSON_UNQUOTE(JSON_EXTRACT(JSON_UNQUOTE(data_delivery) , '$.exit_campa'))=$value");
+        return $this->whereRaw("JSON_UNQUOTE(JSON_EXTRACT(JSON_UNQUOTE(data_delivery) , '$.exit_campa'))=$value")
+        ->whereRaw("JSON_UNQUOTE(JSON_EXTRACT(JSON_UNQUOTE(data_delivery) , '$.force_exit_from_campa')) IS NOT NULL");
     }
 
-    public function hasForceExit($value){
+    public function hasForceDelivery($value){
         return $this->whereRaw("JSON_UNQUOTE(JSON_EXTRACT(JSON_UNQUOTE(data_delivery) , '$.force_exit_from_campa')) IS ".($value ? "NOT" : "" )." NULL");
     }
 
