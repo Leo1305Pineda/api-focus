@@ -14,12 +14,26 @@ use Illuminate\Support\Facades\Auth;
 class VehicleExitRepository extends Repository
 {
 
+    // public function getAll($request)
+    // {
+    //     return VehicleExit::with($this->getWiths($request->with))
+    //         ->filter($request->all())
+    //         ->orderByDesc('created_at')
+    //         ->paginate($request->input('per_page'));
+    // }
+
     public function getAll($request)
     {
-        return VehicleExit::with($this->getWiths($request->with))
+        $perPage = $request->input('per_page');
+        $query = VehicleExit::with($this->getWiths($request->with))
             ->filter($request->all())
-            ->orderByDesc('created_at')
-            ->paginate($request->input('per_page'));
+            ->orderBy('created_at', 'DESC');
+    
+        if ($perPage) {
+            return $query->paginate($perPage);
+        } else {
+            return $query->get();
+        }
     }
 
     public function getById($request, $id)

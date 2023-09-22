@@ -21,14 +21,26 @@ class DeliveryVehicleRepository extends Repository
         $this->squareRepository = $squareRepository;
     }
 
+    // public function index($request)
+    // {
+    //     return DeliveryVehicle::with($this->getWiths($request->with))
+    //         ->filter($request->all())
+    //         ->orderBy('delivery_note_id', 'DESC')
+    //         ->paginate($request->input('per_page'));
+    // }
     public function index($request)
     {
-        return DeliveryVehicle::with($this->getWiths($request->with))
+        $perPage = $request->input('per_page');
+        $query = DeliveryVehicle::with($this->getWiths($request->with))
             ->filter($request->all())
-            ->orderBy('delivery_note_id', 'DESC')
-            ->paginate($request->input('per_page'));
+            ->orderBy('delivery_note_id', 'DESC');
+    
+        if ($perPage) {
+            return $query->paginate($perPage);
+        } else {
+            return $query->get();
+        }
     }
-
     public function createDeliveryVehicles($vehicleId, $data, $deliveryNoteId)
     {
         $user = User::with('campas')
