@@ -63,6 +63,14 @@ class ReceptionFilter extends ModelFilter
         });
     }
 
+    public function vehicleDeleted($idDelete)
+    {
+        return $this->whereHas('vehicle', function ($query) use ($idDelete) {
+            return $idDelete ? $query->whereNotNull('deleted_at') : $query->whereNull('deleted_at');
+        });
+    }
+
+
     public function orderDesc($field)
     {
         return $this->orderByDesc($field);

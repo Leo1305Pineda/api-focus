@@ -342,6 +342,25 @@ class Reception extends Model
             });
     }
 
+    public function lastTaskValidateChecklist(){
+        return $this->hasOne(PendingTask::class)
+            ->where('task_id', Task::VALIDATE_CHECKLIST)
+            ->where('approved', true)
+            ->where(function($query){
+                return $query->whereIn('state_pending_task_id', [StatePendingTask::FINISHED]);
+            });
+    }
+
+    public function lastTaskVehicleExit(){
+        return $this->hasOne(PendingTask::class)
+            ->where('task_id', Task::TOALQUILADO)
+            ->where('approved', true)
+            ->where(function($query){
+                return $query->whereIn('state_pending_task_id', [StatePendingTask::FINISHED]);
+            });
+    }
+
+
     public function scopeBySubStatesNotIds($query, array $ids){
         return $query->whereHas('vehicle', function (Builder $builder) use ($ids) {
             return $builder->whereNotIn('sub_state_id', $ids)->orWhereNull('sub_state_id');

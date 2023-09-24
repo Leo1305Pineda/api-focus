@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\Auth;
 
 class ReceptionRepository extends Repository
 {
-
+    protected $userRepository;
+    protected $vehiclePictureRepository;
+    protected $vehicleRepository;
     public function __construct(
         UserRepository $userRepository,
         VehiclePictureRepository $vehiclePictureRepository,
@@ -24,6 +26,7 @@ class ReceptionRepository extends Repository
         ini_set("memory_limit", "-1");
         return Reception::with($this->getWiths($request->with))
             ->filter($request->all())
+            ->orderBy('vehicle_id')
             ->paginate($request->input('per_page'));
     }
 

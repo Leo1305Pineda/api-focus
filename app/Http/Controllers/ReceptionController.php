@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 
 class ReceptionController extends Controller
 {
+    protected $receptionRepository;
     public function __construct(ReceptionRepository $receptionRepository)
     {
         $this->receptionRepository = $receptionRepository;
