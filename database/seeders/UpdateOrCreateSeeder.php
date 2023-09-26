@@ -7,6 +7,7 @@ use App\Models\State;
 use App\Models\SubState;
 use App\Models\SubStateTypeUserApp;
 use App\Models\Task;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
 class UpdateOrCreateSeeder extends Seeder
@@ -71,7 +72,7 @@ class UpdateOrCreateSeeder extends Seeder
             "duration" => 0
         ]);
 
-        SubStateTypeUserApp::updateOrCreate([ "sub_state_id" => 31 ], [ "type_user_app_id" => 2]);
-        SubStateTypeUserApp::updateOrCreate([ "sub_state_id" => 32 ], [ "type_user_app_id" => 1]);
+        SubStateTypeUserApp::updateOrCreate(["sub_state_id" => 31, "type_user_app_id" => 2], ["updated_at" => Carbon::now()]);
+        SubStateTypeUserApp::updateOrCreate(["sub_state_id" => 32, "type_user_app_id" => 1], ["updated_at" => Carbon::now()]);
     }
 }
