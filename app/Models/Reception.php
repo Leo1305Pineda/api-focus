@@ -360,6 +360,15 @@ class Reception extends Model
             });
     }
 
+    public function lastTaskVo(){
+        return $this->hasOne(PendingTask::class)
+            ->where('task_id', Task::VO)
+            ->where('approved', true)
+            ->where(function($query){
+                return $query->whereIn('state_pending_task_id', [StatePendingTask::FINISHED]);
+            });
+    }
+
 
     public function scopeBySubStatesNotIds($query, array $ids){
         return $query->whereHas('vehicle', function (Builder $builder) use ($ids) {

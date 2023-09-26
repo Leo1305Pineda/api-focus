@@ -27,12 +27,31 @@ use App\Repositories\DeliveryVehicleRepository;
 use App\Repositories\VehicleExitRepository;
 use App\Repositories\StateChangeRepository;
 
+use Illuminate\Database\Eloquent\Builder;
 use App\Repositories\CampaRepository;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class VehicleRepository extends Repository
 {
+
+    protected $userRepository;
+    protected $categoryRepository;
+    protected $defleetVariableRepository;
+    protected $stateRepository;
+    protected $brandRepository;
+    protected $vehicleModelRepository;
+    protected $campaRepository;
+    protected $typeModelOrderRepository;
+    protected $deliveryVehicleRepository;
+    protected $vehicleExitRepository;
+    protected $squareRepository;
+    protected $deliveryNoteRepository;
+    protected $stateChangeRepository;
+    protected $historyLocationRepository;
+    protected $vehiclePictureRepository;
 
     public function __construct(
         UserRepository $userRepository,
@@ -218,6 +237,24 @@ class VehicleRepository extends Repository
     {
         $vehicle = Vehicle::findOrFail($id);
         $vehicle->update($request->all());
+        if ($vehicle->type_model_order_id === TypeModelOrder::VO || $vehicle->type_model_order_id === TypeModelOrder::VO_ENTREGADO) {
+            $pending_task = PendingTask::updateOrCreate([
+                'vehicle_id' =>$vehicle->id,
+                'reception_id' => $vehicle->lastReception->id ?? null,
+                'task_id' => Task::VO
+            ], [
+                'state_pending_task_id' => StatePendingTask::FINISHED,
+                'user_id' => Auth::id(),
+                'user_start_id' => Auth::id(),
+                'user_end_id' => Auth::id(),
+                'order' => 1,
+                'approved' => true,
+                'datetime_pending' => Carbon::now(),
+                'datetime_start' => Carbon::now(),
+                'datetime_finish' =>  Carbon::now(),
+                'campa_id' => $vehicle->campa_id
+            ]);
+        }
         return Vehicle::with($this->getWiths($request->with) ?? [])->findOrFail($id);
     }
 
@@ -521,6 +558,22 @@ class VehicleRepository extends Repository
                             $vehicle->sub_state_id = null;
                         } else {
                             $vehicle->type_model_order_id = TypeModelOrder::VO_ENTREGADO;
+                            $pending_task = PendingTask::updateOrCreate([
+                                'vehicle_id' =>$vehicle->id,
+                                'reception_id' => $vehicle->lastReception->id ?? null,
+                                'task_id' => Task::VO
+                            ], [
+                                'state_pending_task_id' => StatePendingTask::FINISHED,
+                                'user_id' => Auth::id(),
+                                'user_start_id' => Auth::id(),
+                                'user_end_id' => Auth::id(),
+                                'order' => 1,
+                                'approved' => true,
+                                'datetime_pending' => Carbon::now(),
+                                'datetime_start' => Carbon::now(),
+                                'datetime_finish' =>  Carbon::now(),
+                                'campa_id' => $vehicle->campa_id
+                            ]);
                         }
 
                         $vehicle->save();

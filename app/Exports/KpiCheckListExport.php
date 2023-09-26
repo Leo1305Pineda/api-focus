@@ -12,6 +12,7 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class KpiCheckListExport implements FromArray, WithHeadings
 {
+    protected $request;
     protected $header = ['Invarat'];
     public function __construct($request)
     {
