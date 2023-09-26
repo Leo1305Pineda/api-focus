@@ -72,7 +72,14 @@ class UpdateOrCreateSeeder extends Seeder
             "duration" => 0
         ]);
 
-        SubStateTypeUserApp::updateOrCreate(["sub_state_id" => 31, "type_user_app_id" => 2], ["updated_at" => Carbon::now()]);
-        SubStateTypeUserApp::updateOrCreate(["sub_state_id" => 32, "type_user_app_id" => 1], ["updated_at" => Carbon::now()]);
+        $model = SubStateTypeUserApp::where('sub_state_id', 31)->where('type_user_app_id', 2)->first();
+        if (!$model) {
+            SubStateTypeUserApp::create(["sub_state_id" => 31, "type_user_app_id" => 2]);
+        }
+
+        $model = SubStateTypeUserApp::where('sub_state_id', 32)->where('type_user_app_id', 1)->first();
+        if (!$model) {
+            SubStateTypeUserApp::create(["sub_state_id" => 32, "type_user_app_id" => 1]);
+        }
     }
 }
