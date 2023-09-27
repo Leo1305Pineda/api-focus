@@ -12,6 +12,11 @@ class ReceptionFilter extends ModelFilter
         return $this->whereIn('campa_id', $ids);
     }
 
+    public function subStatesIds($ids)
+    {
+        return $this->whereIn('sub_state_id', $ids);
+    }
+
     public function vehicleIds($ids)
     {
         return $this->whereIn('vehicle_id', $ids);
@@ -58,9 +63,7 @@ class ReceptionFilter extends ModelFilter
 
     public function typeModelOrderIds($ids)
     {
-        return $this->whereHas('vehicle', function ($query) use ($ids) {
-            return $query->whereIn('type_model_order_id', $ids);
-        });
+        return $this->whereIn('type_model_order_id', $ids);
     }
 
     public function vehicleDeleted($idDelete)

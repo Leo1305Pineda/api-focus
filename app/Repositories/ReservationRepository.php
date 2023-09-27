@@ -12,6 +12,8 @@ use Exception;
 
 class ReservationRepository extends Repository {
 
+    protected $taskReservationRepository;
+    protected  $vehicleRepository;
     public function __construct(
         TaskReservationRepository $taskReservationRepository,
         VehicleRepository $vehicleRepository

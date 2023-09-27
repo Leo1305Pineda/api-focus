@@ -196,23 +196,27 @@ class Reception extends Model
     use HasFactory, Filterable, LogsActivity;
 
     protected $fillable = [
-        'campa_id',
         'type_model_order_id',
         'vehicle_id',
         'finished',
         'has_accessories',
         'created_at',
         'updated_at',
+        /** Vehicle fields */
         'remote_id',
         'company_id',
         "campa_id",
         'category_id',
         'sub_state_id',
         'color_id',
+        'ubication',
         'plate',
         'vehicle_model_id',
+        'color',
         'type_model_order_id',
         'kms',
+        'last_change_state',
+        'last_change_sub_state',
         'next_itv',
         'has_environment_label',
         'observations',
@@ -227,6 +231,8 @@ class Reception extends Model
         'ready_to_delivery',
         'deleted_user_id',
         'seater',
+        /** End */
+
     ];
 
     protected $dates = [
