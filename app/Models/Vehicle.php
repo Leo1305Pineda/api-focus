@@ -846,7 +846,7 @@ class Vehicle extends Model
         return $query->where('campa_id', $id);
     }
 
-    public function scopeByCampaIds($query, array $campaIds){
+    public function scopeByCampas($query, array $campaIds){
         $ids = array_filter($campaIds, fn($value) => !is_null($value) && $value !== '' && $value != 0);
         if (count($ids) == count($campaIds)) {
             return $query->whereIn('campa_id', $ids);
