@@ -417,7 +417,7 @@ class PendingTask extends Model
         'user_id'
     ];
 
-    protected $appends = ['total_paused'];
+    protected $appends = ['total_paused', 'hours'];
 
     public function getTotalPausedAttribute()
     {
@@ -427,6 +427,14 @@ class PendingTask extends Model
         $diffS = $datetime_start->diffInSeconds($datetime_finish);
         $gmdate = gmdate('H:i:s', $diffS);
         return "$diffD $gmdate";
+    }
+
+    public function getHoursAttribute()
+    {
+        $datetime_start = Carbon::parse($this->datetime_start);
+        $datetime_finish = Carbon::parse($this->datetime_finish);
+        $diffH = $datetime_start->diffInHours($datetime_finish);
+        return $diffH;
     }
  
     public function vehicle(){
