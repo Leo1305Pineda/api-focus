@@ -421,20 +421,27 @@ class PendingTask extends Model
 
     public function getTotalPausedAttribute()
     {
-        $datetime_start = Carbon::parse($this->datetime_start);
-        $datetime_finish = Carbon::parse($this->datetime_finish);
-        $diffD = $datetime_start->diffInDays($datetime_finish) || '';
-        $diffS = $datetime_start->diffInSeconds($datetime_finish);
-        $gmdate = gmdate('H:i:s', $diffS);
-        return "$diffD $gmdate";
+        $datetime_start = Carbon::create($this->datetime_start);
+        $datetime_finish = Carbon::create($this->datetime_finish);
+        // $diffD = $datetime_start->diffInDays($datetime_finish) || '';
+        // $diffS = $datetime_start->diffInSeconds($datetime_finish);
+        // $gmdate = gmdate('H:i:s', $diffS);
+
+        setlocale(LC_TIME, 'es_ES');
+        Carbon::setLocale('es');
+        $difference = $datetime_finish->longRelativeDiffForHumans($datetime_start, 3);
+        return str_replace('antes', '', str_replace('después' ,'',$difference));
+        // return str_replace(' horas ', ':'  ,str_replace('días' , ' ',$difference));
+
+       // return "$diffD $gmdate";
     }
 
     public function getHoursAttribute()
     {
         $datetime_start = Carbon::parse($this->datetime_start);
         $datetime_finish = Carbon::parse($this->datetime_finish);
-        $diffH = $datetime_start->diffInHours($datetime_finish);
-        return $diffH;
+        $diffS = $datetime_start->diffInSeconds($datetime_finish);
+        return str_replace('.', ',', (string) round($diffS / 3600, 2));
     }
  
     public function vehicle(){
