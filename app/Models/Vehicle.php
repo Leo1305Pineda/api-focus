@@ -834,8 +834,8 @@ class Vehicle extends Model
         return $query->whereHas('pendingTasks.budgetPendingTasks');
     }
 
-    public function scopeByCampasOfUser($query, array $campasIds){
-        return $query->whereIn('campa_id', $campasIds);
+    public function scopeByCampasOfUser($query, array $campaIds){
+        return $query->whereIn('campa_id', $campaIds);
     }
 
     public function scopeBySubStateNull($query){
@@ -846,9 +846,9 @@ class Vehicle extends Model
         return $query->where('campa_id', $id);
     }
 
-    public function scopeCampasIds($query, array $campasIds){
-        $ids = array_filter($campasIds, fn($value) => !is_null($value) && $value !== '' && $value != 0);
-        if (count($ids) == count($campasIds)) {
+    public function scopeCampaIds($query, array $campaIds){
+        $ids = array_filter($campaIds, fn($value) => !is_null($value) && $value !== '' && $value != 0);
+        if (count($ids) == count($campaIds)) {
             return $query->whereIn('campa_id', $ids);
         }
         return $query->whereNull('campa_id')->orWhereIn('campa_id', $ids);

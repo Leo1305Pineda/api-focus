@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\PendingTask;
 use App\Models\Role;
 use App\Models\State;
 use App\Models\SubState;
@@ -9,6 +10,7 @@ use App\Models\SubStateTypeUserApp;
 use App\Models\Task;
 use App\Models\Vehicle;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Seeder;
 
 class UpdateOrCreateSeeder extends Seeder
@@ -113,6 +115,13 @@ class UpdateOrCreateSeeder extends Seeder
                     'seater' => $vehicle->seater
                 ]);
             }
+        }
+
+
+        $pending_tasks = PendingTask::where('approved', 1)->whereNull('campa_id')->get();
+        foreach ($pending_tasks as $key => $pending_task) {
+            $pending_task->campa_id = $pending_task->reception->campa_id;
+            $pending_task->save();
         }
     }
 }

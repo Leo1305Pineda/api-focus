@@ -21,12 +21,12 @@ class VehicleFilter extends ModelFilter
 
     public function campas($ids)
     {
-        return $this->campasIds($ids);
+        return $this->campaIds($ids);
     }
 
     public function campaIds($ids)
     {
-        return $this->campasIds($ids);
+        return $this->campaIds($ids);
     }
 
     public function campaNull($value)

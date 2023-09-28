@@ -45,11 +45,11 @@ class PendingTaskFilter extends ModelFilter
         return $this->byTaskIds($ids);
     }
 
-    public function campasIds($campasIds)
+    public function campaIds($campaIds)
     {
-        return $this->whereHas('reception', function(Builder $builder) use($campasIds){
-            $ids = array_filter($campasIds, fn($value) => !is_null($value) && $value !== '' && $value != 0); 
-            if (count($ids) == count($campasIds)) {
+        return $this->whereHas('reception', function(Builder $builder) use($campaIds){
+            $ids = array_filter($campaIds, fn($value) => !is_null($value) && $value !== '' && $value != 0); 
+            if (count($ids) == count($campaIds)) {
                 return $builder->whereIn('campa_id', $ids);
             }
             return $builder->whereNull('campa_id')->whereIn('campa_id', $ids);

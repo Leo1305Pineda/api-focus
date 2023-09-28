@@ -10,6 +10,10 @@ use Symfony\Component\HttpFoundation\Response as HttpFoundationResponse;
 
 class PendingTaskController extends Controller
 {
+    protected $taskController;
+    protected $incidenceController;
+    protected $vehicleController;
+    protected $pendingTaskRepository;
     public function __construct(
         TaskController $taskController,
         IncidenceController $incidenceController,

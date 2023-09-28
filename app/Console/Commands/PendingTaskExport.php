@@ -48,7 +48,7 @@ class PendingTaskExport extends Command
         foreach ($campas as $key => $campa) {
             $request = request();
             $request->merge([
-                'campasIds' => [$campa->id]
+                'campaIds' => [$campa->id]
             ]);
             $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', strtolower($campa->name))));
             $file_name = 'tareas-realizadas-' . $slug . '-' . date('d-m-Y') . '-' . $array[0] . '.xlsx';

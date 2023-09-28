@@ -78,7 +78,7 @@ class ReportsCommand extends Command
             switch ($report->typeReport->model_class) {
                 case PendingTaskExport::class:
                     $request = collect([
-                        'campasIds' => [$report->campa_id]
+                        'campaIds' => [$report->campa_id]
                     ]);
                     Excel::store(new PendingTaskExport($request), $file_name, $disk);
                     break;

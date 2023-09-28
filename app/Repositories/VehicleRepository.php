@@ -516,7 +516,7 @@ class VehicleRepository extends Repository
         return Vehicle::with($this->getWiths($request->with))
             ->stateIds($request->input('states'))
             ->defleetBetweenDateApproved($request->input('date_start'), $request->input('date_end'))
-            ->campasIds($request->input('campas'))
+            ->campaIds($request->input('campas'))
             ->get();
     }
 

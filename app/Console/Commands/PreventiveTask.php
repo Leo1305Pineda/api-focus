@@ -14,6 +14,7 @@ use App\Repositories\StateChangeRepository;
 use App\Repositories\TaskRepository;
 use App\Repositories\VehicleRepository;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -93,6 +94,7 @@ class PreventiveTask extends Command
                 $vehicle = Vehicle::findOrFail($request->input('vehicle_id'));
 
                 $pending_task = new PendingTask();
+                $pending_task->campa_id = $vehicle->campa_id;
 
                 $tasksApproved = count($vehicle->lastReception->approvedPendingTasks);
 

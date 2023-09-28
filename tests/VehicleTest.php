@@ -321,7 +321,7 @@ class VehicleTest extends TestCase
     /** @test */
     public function should_search_by_campas()
     {
-        $this->assertInstanceOf(Builder::class, $this->vehicle->campasIds([]));
+        $this->assertInstanceOf(Builder::class, $this->vehicle->campaIds([]));
     }
 
     /** @test */

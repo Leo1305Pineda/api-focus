@@ -97,6 +97,7 @@ class AldController extends Controller
                 ]);
             }
             $pending_task = new PendingTask();
+            $pending_task->campa_id = $vehicle->campa_id;
 
             $tasksApproved = count($vehicle->lastReception->approvedPendingTasks);
 
