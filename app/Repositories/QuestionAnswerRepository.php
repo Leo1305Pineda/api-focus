@@ -114,8 +114,6 @@ class QuestionAnswerRepository
 
                 $vehicle = Vehicle::findOrFail($request->input('vehicle_id'));
 
-                // $vehicle->next_itv = ;
-
                 $pendingTasks = $vehicle->lastReception->pendingTasks ?? null;
                 if ($pendingTasks) {
                     foreach ($pendingTasks as $key => $pending_task) {
