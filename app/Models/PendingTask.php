@@ -430,10 +430,20 @@ class PendingTask extends Model
         setlocale(LC_TIME, 'es_ES');
         Carbon::setLocale('es');
         $difference = $datetime_finish->longRelativeDiffForHumans($datetime_start, 3);
-        return str_replace('antes', '', str_replace('después' ,'',$difference));
+        return str_replace('antes', '', str_replace('después', '', $difference));
         // return str_replace(' horas ', ':'  ,str_replace('días' , ' ',$difference));
 
-       // return "$diffD $gmdate";
+        // return "$diffD $gmdate";
+    }
+
+    public function hhmm($secs)
+    {
+        $minutes = floor($secs / 60);
+        $secs = $secs % 60;
+        $hours = floor($minutes / 60);
+        $minutes = $minutes % 60;
+        return $hours < 10 ? $hours : "$hours,$minutes";
+        // return pad(hours)+":"+pad(minutes)+":"+pad(secs); for old browsers
     }
 
     public function getHoursAttribute()
@@ -441,149 +451,181 @@ class PendingTask extends Model
         $datetime_start = Carbon::parse($this->datetime_start);
         $datetime_finish = Carbon::parse($this->datetime_finish);
         $diffS = $datetime_start->diffInSeconds($datetime_finish);
-        return str_replace('.', ',', (string) round($diffS / 3600, 2));
+        return $this->hhmm($diffS);
+        //return str_replace('.', ',', (string) round($diffS / 3600, 2));
     }
- 
-    public function vehicle(){
+
+    public function vehicle()
+    {
         return $this->belongsTo(Vehicle::class);
     }
 
-    public function typeModelOrder(){
+    public function typeModelOrder()
+    {
         return $this->belongsTo(TypeModelOrder::class);
     }
 
-    public function reception(){
+    public function reception()
+    {
         return $this->belongsTo(Reception::class);
     }
 
-    public function lastDeliveryVehicle(){
+    public function lastDeliveryVehicle()
+    {
         return $this->hasOne(DeliveryVehicle::class)->withTrashed()->ofMany([
             'pending_task_id' => 'max'
         ]);
     }
 
-    public function lastVehicleExit(){
+    public function lastVehicleExit()
+    {
         return $this->hasOne(VehicleExit::class)->ofMany([
             'pending_task_id' => 'max'
         ]);
     }
 
-    public function lastDeliveredPendingTask(){
+    public function lastDeliveredPendingTask()
+    {
         return $this->belongsTo(PendingTask::class, 'last_delivered_pending_task_id', 'id');
     }
 
-    public function questionAnswer(){
+    public function questionAnswer()
+    {
         return $this->belongsTo(QuestionAnswer::class);
     }
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function task(){
+    public function task()
+    {
         return $this->belongsTo(Task::class);
     }
 
-    public function campa(){
+    public function campa()
+    {
         return $this->belongsTo(Campa::class);
     }
 
-    public function statePendingTask(){
+    public function statePendingTask()
+    {
         return $this->belongsTo(StatePendingTask::class);
     }
 
-    public function groupTask(){
+    public function groupTask()
+    {
         return $this->belongsTo(GroupTask::class);
     }
 
-    public function damage(){
+    public function damage()
+    {
         return $this->belongsTo(Damage::class);
     }
 
-    public function incidences(){
+    public function incidences()
+    {
         return $this->belongsToMany(Incidence::class);
     }
 
-    public function pendingTaskCanceled(){
+    public function pendingTaskCanceled()
+    {
         return $this->hasMany(PendingTaskCanceled::class);
     }
 
-    public function vehicleExit(){
+    public function vehicleExit()
+    {
         return $this->hasOne(VehicleExit::class);
     }
 
-    public function operations(){
+    public function operations()
+    {
         return $this->hasMany(Operation::class);
     }
 
-    public function budgetPendingTasks(){
+    public function budgetPendingTasks()
+    {
         return $this->hasMany(BudgetPendingTask::class);
     }
 
-    public function estimatedDates(){
+    public function estimatedDates()
+    {
         return $this->hasMany(EstimatedDate::class);
     }
 
-    public function lastEstimatedDate(){
+    public function lastEstimatedDate()
+    {
         return $this->hasOne(EstimatedDate::class)->ofMany([
             'id' => 'max'
         ]);
     }
 
-    public function userStart(){
+    public function userStart()
+    {
         return $this->belongsTo(User::class, 'user_start_id');
     }
 
-    public function userEnd(){
+    public function userEnd()
+    {
         return $this->belongsTo(User::class, 'user_end_id');
     }
 
-    public function scopeByCampas($query, array $ids){
-        return $query->whereHas('vehicle.campa', function (Builder $builder) use($ids){
+    public function scopeByCampas($query, array $ids)
+    {
+        return $query->whereHas('vehicle.campa', function (Builder $builder) use ($ids) {
             return $builder->whereIn('id', $ids);
         });
     }
 
-    public function scopePendingOrInProgress($query){
+    public function scopePendingOrInProgress($query)
+    {
         return $query->where('state_pending_task_id', StatePendingTask::PENDING)
-                ->orWhere('state_pending_task_id', StatePendingTask::IN_PROGRESS);
+            ->orWhere('state_pending_task_id', StatePendingTask::IN_PROGRESS);
     }
 
-    public function scopeCanSeeHomework($query, $user){
-        return $query->whereHas('task.subState.type_users_app', function ($query) use($user) {
-            return $query->where(function($where)use($user){
+    public function scopeCanSeeHomework($query, $user)
+    {
+        return $query->whereHas('task.subState.type_users_app', function ($query) use ($user) {
+            return $query->where(function ($where) use ($user) {
                 $where->where('type_user_app_id', $user['type_user_app_id'])
-                ->when(in_array(3, $user->campas->pluck('id')->toArray()) && ($user['type_user_app_id'] == 3), function($q){ // solo para leganes
-                    $tasks = [Task::FUEL_DIESEL, Task::FUEL_GASOLINE];
-                    return $q->orWhereIn('task_id',$tasks);
-                });
+                    ->when(in_array(3, $user->campas->pluck('id')->toArray()) && ($user['type_user_app_id'] == 3), function ($q) { // solo para leganes
+                        $tasks = [Task::FUEL_DIESEL, Task::FUEL_GASOLINE];
+                        return $q->orWhereIn('task_id', $tasks);
+                    });
             });
         });
     }
 
-    public function scopeByPlate($query, string $plate){
-        return $query->whereHas('vehicle', function (Builder $builder) use($plate) {
+    public function scopeByPlate($query, string $plate)
+    {
+        return $query->whereHas('vehicle', function (Builder $builder) use ($plate) {
             return $builder->where('plate', $plate);
         });
     }
 
-    public function scopeByVehicleIds($query, array $ids){
+    public function scopeByVehicleIds($query, array $ids)
+    {
         return $query->whereIn('vehicle_id', $ids);
     }
 
-    public function scopeByTaskIds($query, array $ids){
+    public function scopeByTaskIds($query, array $ids)
+    {
         return $query->whereIn('task_id', $ids);
     }
 
-    public function scopeByStatePendingTaskIds($query,  array $ids){
+    public function scopeByStatePendingTaskIds($query,  array $ids)
+    {
         return $query->whereIn('state_pending_task_id', $ids);
     }
 
-    public function scopeByIds($query, array $ids){
+    public function scopeByIds($query, array $ids)
+    {
         return $query->whereIn('id', $ids);
     }
 
-    public function scopeByApproved($query, int $approved){
+    public function scopeByApproved($query, int $approved)
+    {
         return $query->where('approved', $approved);
     }
 
@@ -593,14 +635,14 @@ class PendingTask extends Model
      * @param  \Illuminate\Database\Eloquent\Builder $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeWhereDateBetween($query,$fieldName,$fromDate,$todate)
+    public function scopeWhereDateBetween($query, $fieldName, $fromDate, $todate)
     {
-        return $query->whereDate($fieldName,'>=',$fromDate)->whereDate($fieldName,'<=',$todate);
+        return $query->whereDate($fieldName, '>=', $fromDate)->whereDate($fieldName, '<=', $todate);
     }
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-        ->logOnly(['*'])
-        ->logOnlyDirty();
+            ->logOnly(['*'])
+            ->logOnlyDirty();
     }
 }
