@@ -88,6 +88,7 @@ class QuestionAnswerRepository
                 $questionnaire->reception_id = $vehicle->lastReception->id;
                 $questionnaire->save();
                 $questions = $request->input('questions');
+
                 $has_environment_label = $vehicle->has_environment_label;
                 foreach ($questions as $question) {
                     $questionAnswer = new QuestionAnswer();
@@ -103,6 +104,11 @@ class QuestionAnswerRepository
 
                     if ($questionAnswer->question_id === 4 && $question['response'] == 1) {
                         $this->notificationItvMail->build($request->input('vehicle_id'));
+                    }
+
+                    if ($questionAnswer->question_id === 93) {
+                        $vehicle->next_itv = $questionAnswer->description;
+                        $vehicle->save();
                     }
                 }
 
