@@ -437,7 +437,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
          */
         $router->get('/questionnaire','QuestionnaireController@index');
         $router->get('/questionnaire/{id}', 'QuestionnaireController@getById');
-        $router->post('/questionnaire/approved', 'QuestionnaireController@approved');
+        $router->post('/questionnaire/approved', 'QuestionnaireController@approved', ['middleware' => 'throttle:1,1']);
 
 
         /**

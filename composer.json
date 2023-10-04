@@ -20,6 +20,7 @@
         "illuminate/mail": "^8.44",
         "illuminate/notifications": "^8.63",
         "illuminate/redis": "^8.63",
+        "illuminate/routing": "^8",
         "irazasyed/larasupport": "^1.7",
         "laravel/horizon": "^5.7",
         "laravel/lumen-framework": "^8.0",
