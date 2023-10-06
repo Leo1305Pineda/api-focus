@@ -9,6 +9,9 @@ use App\Models\TypeTask;
 use App\Models\PurchaseOperation;
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * Class Task
@@ -117,7 +120,7 @@ class Task extends Model
      * )
      */
 
-    use HasFactory, Filterable;
+    use HasFactory, Filterable, SoftDeletes, LogsActivity;
 
     const UBICATION = 1;
     const TOCAMPA = 37;
@@ -180,5 +183,11 @@ class Task extends Model
 
     public function scopeByCompany($query, array $ids){
         return $query->whereIn('company_id', $ids);
+    }
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+        ->logOnly(['*'])
+        ->logOnlyDirty();
     }
 }
