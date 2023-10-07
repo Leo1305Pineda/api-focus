@@ -97,6 +97,7 @@ class QuestionAnswerRepository
                     $questionAnswer->task_id = $question['task_id'];
                     $questionAnswer->response = $question['response'];
                     $questionAnswer->description = $question['description'] ?? '';
+                    $questionAnswer->url = $question['url'] ?? '';
                     $questionAnswer->save();
                     if ($questionAnswer->question_id === 9) {
                         $has_environment_label = $question['response'];
