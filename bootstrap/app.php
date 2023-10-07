@@ -88,7 +88,8 @@ $app->middleware([
 
 $app->routeMiddleware([
     'auth' => App\Http\Middleware\Authenticate::class,
-    App\Http\Middleware\JsonRequestMiddleware::class
+    App\Http\Middleware\JsonRequestMiddleware::class,
+    'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
 ]);
 
 /*
