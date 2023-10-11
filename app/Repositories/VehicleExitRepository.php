@@ -28,7 +28,7 @@ class VehicleExitRepository extends Repository
         $query = VehicleExit::with($this->getWiths($request->with))
             ->filter($request->all())
             ->orderBy('created_at', 'DESC');
-    
+
         if ($perPage) {
             return $query->paginate($perPage);
         } else {
@@ -61,11 +61,10 @@ class VehicleExitRepository extends Repository
         $user = User::findOrFail(Auth::id());
         $vehicle = Vehicle::findOrFail($vehicle_id);
         $vehicleExit = new VehicleExit();
-        $pending_task = PendingTask::updateOrCreate([
+        $pending_task = PendingTask::create([
             'vehicle_id' => $vehicle_id,
             'reception_id' => $vehicle->lastReception->id ?? null,
             'task_id' => Task::WORKSHOP_EXTERNAL,
-        ], [
             'state_pending_task_id' => StatePendingTask::FINISHED,
             'user_id' => Auth::id(),
             'user_start_id' => Auth::id(),
