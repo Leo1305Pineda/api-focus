@@ -114,7 +114,8 @@ class Questionnaire extends Model
         'user_id',
         'vehicle_id',
         'datetime_approved',
-        'file'
+        'file',
+        'user_id_updated'
     ];
 
     public function vehicle(){
@@ -123,6 +124,10 @@ class Questionnaire extends Model
 
     public function user(){
         return $this->belongsTo(User::class);
+    }
+
+    public function userUpdated(){
+        return $this->belongsTo(User::class, 'user_id_updated');
     }
 
     public function reception(){
