@@ -284,6 +284,9 @@ class QuestionAnswerRepository
         if ($request->input('task_id')) {
             $questionnaire = Questionnaire::find($request->input('questionnaire_id'));
             $this->pendingTaskRepository->updatePendingTaskFromValidation($questionnaire->reception_id, $request->input('last_task_id'), $request->input('task_id'));
+            
+            $questionnaire->user_id_updated = Auth::id();
+            $questionnaire->save();
         }
         $questionAnswer->update($request->all());
         return ['question_answer' => $questionAnswer];
@@ -293,6 +296,9 @@ class QuestionAnswerRepository
     {
         $questionAnswer = QuestionAnswer::findOrFail($id);
         $vehicle = $questionAnswer->questionnaire->vehicle;
+
+        $questionnaire = $questionAnswer->questionnaire;
+
         $questionAnswer->update($request->all());
         $pendingTask = PendingTask::where('question_answer_id', $questionAnswer->id)->first();
         if (!is_null($pendingTask)) {
@@ -330,6 +336,10 @@ class QuestionAnswerRepository
             $value->order = $key + 1;
             $value->save();
         }
+
+        $questionnaire->user_id_updated = Auth::id();
+        $questionnaire->save();
+
         return $questionAnswer;
     }
 }
