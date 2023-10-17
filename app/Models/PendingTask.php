@@ -388,7 +388,7 @@ class PendingTask extends Model
 
     use HasFactory, Filterable, LogsActivity;
 
-    const ORDER_TASKS = [39, 11, 2, 3, 4, 41, 5, 6, 7, 8];
+    const ORDER_TASKS = [39, 11, 2, 3, 4, 41, 74, 5, 6, 7, 8];
 
     protected $fillable = [
         'vehicle_id',
