@@ -14,7 +14,7 @@ class AddFieldsToTasksTable extends Migration
     public function up()
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->boolean('costo')->default(false)->after('duration');
+            $table->boolean('cost')->default(false)->after('duration');
             $table->timestamp('deleted_at')->nullable();
             $table->unsignedBigInteger('created_by')->after('created_at')->nullable();
             $table->foreign('created_by')->references('id')->on('users');
