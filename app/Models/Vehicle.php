@@ -15,6 +15,7 @@ use App\Models\Reservation;
 use App\Models\HistoryLocation;
 use App\Models\Reception;
 use App\Models\TradeState;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use EloquentFilter\Filterable;
@@ -579,6 +580,24 @@ class Vehicle extends Model
         'created_at',
         'updated_at'
     ];
+
+    protected $appends = ['last_change_state_days', 'last_change_sub_state_days'];
+
+    public function getLastChangeStateDaysAttribute()
+    {
+        $last_change_state = Carbon::parse($this->last_change_state);
+        $now = Carbon::now();
+        $diff = $last_change_state->diffInDays($now);
+        return $diff;
+    }
+
+    public function getLastChangeSubStateDaysAttribute()
+    {
+        $last_change_sub_state = Carbon::parse($this->last_change_sub_state);
+        $now = Carbon::now();
+        $diff = $last_change_sub_state->diffInDays($now);
+        return$diff;
+    }
 
     public function category(){
         return $this->belongsTo(Category::class, 'category_id');

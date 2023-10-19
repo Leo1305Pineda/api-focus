@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\Log;
 class VehicleController extends Controller
 {
 
+    protected $vehicleRepository;
+    protected $downloadVehicles;
+
     public function __construct(VehicleRepository $vehicleRepository, DownloadVehicles $downloadVehicles)
     {
         $this->vehicleRepository = $vehicleRepository;

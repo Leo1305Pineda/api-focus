@@ -108,13 +108,31 @@ class VehicleRepository extends Repository
         ->findOrFail($id);
     }
 
+    function queryKpiSubState($days, $vehicle_ids) {
+        return "(select count(id) from vehicles where vehicles.sub_state_id = sub_states.id and vehicles.id in($vehicle_ids) and DATEDIFF(NOW(), vehicles.last_change_sub_state) >= $days[0] and DATEDIFF(NOW(), vehicles.last_change_sub_state) < $days[1] GROUP by vehicles.sub_state_id) AS less_than_" . implode('_', $days) . "_days";
+    }
+
     public function filterVehicle($request)
     {
+        $kpiSubState = $request->input('kpiSubState') ?? null;
+
         $query = Vehicle::with($this->getWiths($request->with))
             ->filter($request->all());
 
         $query->selectRaw('vehicles.*, (SELECT MAX(r.id) FROM receptions r WHERE r.vehicle_id = vehicles.id) as reception_id')
             ->orderBy('reception_id', 'desc');
+
+        if ($kpiSubState) {
+            $vehicle_ids = implode(',', collect($query->get())->map(function ($item){ return $item->id;})->toArray());
+            $kpiSubState = SubState::select(
+                'id',
+                'name',
+                DB::raw("(select count(id) from vehicles where vehicles.sub_state_id = sub_states.id and vehicles.id in($vehicle_ids)) AS total"),
+                DB::raw($this->queryKpiSubState([0, 15], $vehicle_ids)),
+                DB::raw($this->queryKpiSubState([15, 30], $vehicle_ids))
+             //   DB::raw($this->queryKpiSubState([30, 45], $vehicle_ids))
+            )->get();
+        }
 
         if ($request->input('noPaginate')) {
             $vehicles = [
@@ -123,8 +141,43 @@ class VehicleRepository extends Repository
         } else {
             $vehicles =  $query->paginate($request->input('per_page') ?? 5);
         }
-        return ['vehicles' => $vehicles];
+
+        return [
+            'kpiSubState' => $kpiSubState,
+            'vehicles' => $vehicles
+        ];
     }
+    
+    // public function kpiSubStates() {
+    //     $vehicle_ids = implode(',', collect(Vehicle::filter([ 'defleetingAndDelivery' => 1 ])->get())->map(function ($item){ return $item->id;})->toArray());
+    //     return $this->select(
+    //         'id',
+    //         'name',
+    //         DB::raw("(select count(id) from vehicles where vehicles.sub_state_id = sub_states.id and vehicles.id in($vehicle_ids)) AS total_vehicles"),
+    //         // DB::raw('(SELECT COUNT(id) 
+    //         //                 FROM employees 
+    //         //                 WHERE company_id = companies.id
+    //         //                 AND employees.deleted_at IS NULL
+    //         //                 ) AS kpi_employees'),
+    //         // DB::raw('(SELECT COUNT(orders.id) 
+    //         //                 FROM orders 
+    //         //                 JOIN employees ON orders.employee_id = employees.id 
+    //         //                 JOIN campaigns ON orders.campaign_id = campaigns.id 
+    //         //                 WHERE employees.deleted_at IS NULL 
+    //         //                 AND campaigns.company_id = companies.id 
+                            
+    //         //                 ) AS kpi_orders'),
+    //         // DB::raw('(
+
+    //         //     SELECT COUNT(campaign_employees.employee_id) from campaign_employees
+    //         //     JOIN campaigns ON campaign_employees.campaign_id = campaigns.id 
+    //         //     WHERE NOT EXISTS (
+    //         //         SELECT id from orders where employee_id = campaign_employees.employee_id and campaign_employees.campaign_id = orders.campaign_id
+    //         //     )
+    //         //     AND campaigns.date_expired >= \'' . date('Y-m-d') . '\'
+    //         //     ) as kpi_employees_without_orders')
+    //     );
+    // }
 
     public function createFromExcel($request)
     {
