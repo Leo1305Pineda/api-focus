@@ -123,15 +123,23 @@ class VehicleRepository extends Repository
             ->orderBy('reception_id', 'desc');
 
         if ($kpiSubState) {
-            $vehicle_ids = implode(',', collect($query->get())->map(function ($item){ return $item->id;})->toArray());
-            $kpiSubState = SubState::select(
-                'id',
-                'name',
-                DB::raw("(select count(id) from vehicles where vehicles.sub_state_id = sub_states.id and vehicles.id in($vehicle_ids)) AS total"),
-                DB::raw($this->queryKpiSubState([0, 15], $vehicle_ids)),
-                DB::raw($this->queryKpiSubState([15, 30], $vehicle_ids))
-             //   DB::raw($this->queryKpiSubState([30, 45], $vehicle_ids))
-            )->get();
+            $vehicels = collect($query->get())->map(function ($item){ return $item->id;})->toArray();
+            $vehicle_ids = implode(',', $vehicels);
+            if (count($vehicels) > 0) {
+                $kpiSubState = SubState::select(
+                    'id',
+                    'name',
+                    DB::raw("(select count(id) from vehicles where vehicles.sub_state_id = sub_states.id and vehicles.id in($vehicle_ids)) AS total"),
+                    DB::raw($this->queryKpiSubState([0, 15], $vehicle_ids)),
+                    DB::raw($this->queryKpiSubState([15, 30], $vehicle_ids))
+                 //   DB::raw($this->queryKpiSubState([30, 45], $vehicle_ids))
+                )->get();
+            } else {
+                $kpiSubState = SubState::select(
+                    'id',
+                    'name'
+                )->get();
+            }
         }
 
         if ($request->input('noPaginate')) {

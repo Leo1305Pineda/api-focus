@@ -363,6 +363,21 @@ class VehicleFilter extends ModelFilter
         return $this->orderBy($field);
     }
 
+    public function lastChangeSubStateFrom($dateTime)
+    {
+        return $this->whereDate('last_change_sub_state','>=', $dateTime);
+    }
+
+    public function lastChangeSubState($dateTime)
+    {
+        return $this->whereDate('last_change_sub_state', $dateTime);
+    }
+
+    public function lastChangeSubStateTo($dateTime)
+    {
+        return $this->whereDate('last_change_sub_state','<=', $dateTime);
+    }
+
 
     public function withReceptionId($id)
     {
