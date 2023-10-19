@@ -408,4 +408,12 @@ class VehicleFilter extends ModelFilter
         ));
     }
 
+    public function lessThanDays($value) {
+        $r = explode('-',$value);
+        if (count($r) == 1) {
+            return $this->whereRaw("DATEDIFF(NOW(), last_change_sub_state) >= $r[0]");
+        }
+        return $this->whereRaw("DATEDIFF(NOW(), last_change_sub_state) between $r[0] and $r[1]");
+    }
+
 }
