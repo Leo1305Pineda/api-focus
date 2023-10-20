@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 class AccessoryVehicleController extends Controller
 {
 
+    protected $accessoryVehicleRepository;
     public function __construct(AccessoryVehicleRepository $accessoryVehicleRepository)
     {
         $this->accessoryVehicleRepository = $accessoryVehicleRepository;
