@@ -6,6 +6,7 @@ use App\Filters\Base\BaseFilter\BaseFilter;
 use App\Models\CampaUser;
 use App\Models\PendingTask;
 use App\Models\Role;
+use App\Models\StatePendingTask;
 use EloquentFilter\ModelFilter;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\Vehicle;
@@ -416,4 +417,12 @@ class VehicleFilter extends ModelFilter
         return $this->whereRaw("DATEDIFF(NOW(), last_change_sub_state) between $r[0] and $r[1]");
     }
 
+    public function pendingTaskCostAuthorized($value)
+    {
+        return $this->whereHas('pendingTasks', function (Builder $builder) use ($value) {
+            return $builder->where('approved', $value)->whereHas('task', function ($query) {
+                return $query->where('cost', '>', 0);
+            });
+        });
+    }
 }

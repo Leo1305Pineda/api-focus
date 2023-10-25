@@ -197,4 +197,8 @@ class TaskController extends Controller
         return $this->deleteDataResponse($this->taskRepository->delete($id), HttpFoundationResponse::HTTP_OK);
     }
 
+    public function updateCostTask(Request $request, $id){
+        return $this->updateDataResponse($this->taskRepository->updateCost($request, $id), HttpFoundationResponse::HTTP_OK);
+    }
+
 }

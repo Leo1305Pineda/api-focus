@@ -95,6 +95,7 @@ class AldController extends Controller
                     'datetime_finish' =>  Carbon::now(),
                     'campa_id' => $vehicle->campa_id
                 ]);
+                    // 'approved' => Task::find(Task::WORKSHOP_EXTERNAL)->cost
             }
             $pending_task = new PendingTask();
             $pending_task->campa_id = $vehicle->campa_id;
@@ -128,6 +129,7 @@ class AldController extends Controller
             $taskDescription = $this->taskRepository->getById([], $pending_task->task_id);
             $pending_task->duration = $taskDescription['duration'];
             $pending_task->approved = true;
+            // $pending_task->approved = Task::find($request->input('task_id'))->cost;
 
             if ($request->input('state_pending_task_id') == StatePendingTask::FINISHED) {
                 $pending_task->state_pending_task_id = StatePendingTask::FINISHED;

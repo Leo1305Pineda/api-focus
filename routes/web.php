@@ -239,7 +239,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->put('/tasks/update/{id}', 'TaskController@update');
         $router->delete('/tasks/delete/{id}', 'TaskController@delete');
         $router->get('/tasks/{id}', 'TaskController@getById');
-
+        $router->put('/tasks/update-cost/{id}', 'TaskController@updateCostTask');
+        
         /**
          * Transports
          */

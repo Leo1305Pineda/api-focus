@@ -38,4 +38,12 @@ class TaskRepository extends Repository {
         return Task::where('company_id', $companyId)
                 ->get();
     }
+
+    public function updateCost($request, $id){
+        $task = Task::findOrFail($id);
+        $task->cost = $request->input('cost');
+        $task->save();
+        return ['task' => $task];
+    }
+    
 }

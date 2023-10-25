@@ -142,7 +142,8 @@ class Task extends Model
         'type_task_id',
         'need_authorization',
         'name',
-        'duration'
+        'duration',
+        'cost'
     ];
 
     public function pendingTasks(){
