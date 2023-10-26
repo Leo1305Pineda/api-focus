@@ -155,7 +155,7 @@ class QuestionAnswerRepository
                     $pending_task->campa_id = $vehicle->campa_id;
                     $taskDescription = $this->taskRepository->getById([], $task['task_id']);
                     $pending_task->task_id = $task['task_id'];
-                    $pending_task->approved = $task['approved'];
+                    $pending_task->approved = Task::find($task['task_id'])->cost;
                     $pending_task->created_from_checklist = true;
 
                     if ($task['task_id'] === Task::VALIDATE_CHECKLIST) {
@@ -223,7 +223,7 @@ class QuestionAnswerRepository
             $pending_task->campa_id = $vehicle->campa_id;
             $pending_task->task_id = Task::RECEPTION;
             $pending_task->state_pending_task_id = StatePendingTask::FINISHED;
-            $pending_task->approved = 1;
+            $pending_task->approved = Task::find($task['task_id'])->cost;
             $pending_task->created_from_checklist = true;
             $pending_task->datetime_pending = date('Y-m-d H:i:s');
             $pending_task->datetime_start = date('Y-m-d H:i:s');
