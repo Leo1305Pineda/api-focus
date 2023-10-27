@@ -273,7 +273,31 @@ class Reception extends Model
     public function pendingTasks() {
         return $this->hasMany(PendingTask::class)
         ->whereRaw(DB::raw('reception_id = (Select max(id) from receptions where receptions.vehicle_id = pending_tasks.vehicle_id)'))
+        ->whereRaw(DB::raw('approved = (select CASE WHEN cost = 1 THEN 0 ELSE 1 END from tasks where tasks.id = pending_tasks.task_id)'))
+        ->orderBy('state_pending_task_id', 'desc')
+        ->orderBy('order')
+        ->orderBy('datetime_finish', 'desc');;
+    }
+
+    public function approvedPendingTaskCosts() {
+        $task_ids = collect(Task::where('cost', 1)->get())->map(function ($item){ return $item->id;})->toArray();
+        return $this->hasMany(PendingTask::class)
+        ->whereRaw(DB::raw('reception_id = (Select max(id) from receptions where receptions.vehicle_id = pending_tasks.vehicle_id)'))
+       // ->whereRaw(DB::raw('approved = (select CASE WHEN cost = 1 THEN 0 ELSE 1 END from tasks where tasks.id = pending_tasks.task_id)'))
         ->where('approved', 1)
+        ->whereIn('task_id', $task_ids)
+        ->orderBy('state_pending_task_id', 'desc')
+        ->orderBy('order')
+        ->orderBy('datetime_finish', 'desc');;
+    }
+
+    public function notApprovedPendingTaskCosts() {
+        $task_ids = collect(Task::where('cost', 1)->get())->map(function ($item){ return $item->id;})->toArray();
+        return $this->hasMany(PendingTask::class)
+        ->whereRaw(DB::raw('reception_id = (Select max(id) from receptions where receptions.vehicle_id = pending_tasks.vehicle_id)'))
+      //  ->whereRaw(DB::raw('approved = (select CASE WHEN cost = 1 THEN 0 ELSE 1 END from tasks where tasks.id = pending_tasks.task_id)'))
+        ->where('approved', 0)
+        ->whereIn('task_id', $task_ids)
         ->orderBy('state_pending_task_id', 'desc')
         ->orderBy('order')
         ->orderBy('datetime_finish', 'desc');;

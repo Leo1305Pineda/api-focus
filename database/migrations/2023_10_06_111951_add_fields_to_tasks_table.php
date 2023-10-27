@@ -29,7 +29,10 @@ class AddFieldsToTasksTable extends Migration
     public function down()
     {
         Schema::table('tasks', function (Blueprint $table) {
-            //
+            $table->dropColumn('cost');
+            $table->dropColumn('deleted_at');
+            $table->dropForeign('tasks_created_by_foreign');
+            $table->dropColumn('created_by');
         });
     }
 }

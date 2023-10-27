@@ -419,7 +419,8 @@ class VehicleFilter extends ModelFilter
 
     public function pendingTaskCostAuthorized($value)
     {
-        return $this->whereHas('pendingTasks', function (Builder $builder) use ($value) {
+        $m = $value ? 'approvedPendingTaskCosts' : 'notApprovedPendingTaskCosts';
+        return $this->whereHas("lastReception.$m", function (Builder $builder) use ($value) {
             return $builder->where('approved', $value)->whereHas('task', function ($query) {
                 return $query->where('cost', '>', 0);
             });

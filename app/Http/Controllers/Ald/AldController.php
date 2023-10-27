@@ -79,9 +79,14 @@ class AldController extends Controller
         try {
             $this->vehicleRepository->newReception($request->input('vehicle_id'), null,$request->input('campa_id') );
             $vehicle = Vehicle::findOrFail($request->input('vehicle_id'));
+            $approved = 1;
+
             if (!!$request->input('return_workshop_external')) {
                 $vehicle->sub_state_id = null;
                 $vehicle->save();
+                if (Task::find(Task::WORKSHOP_EXTERNAL)->cost > 0) {
+                    $approved = 0;
+                }
                 PendingTask::updateOrCreate([
                     'vehicle_id' => $vehicle->id,
                     'reception_id' => $vehicle->lastReception->id ?? null,
@@ -94,7 +99,7 @@ class AldController extends Controller
                     'datetime_start' => Carbon::now(),
                     'datetime_finish' =>  Carbon::now(),
                     'campa_id' => $vehicle->campa_id,
-                    'approved' => Task::find(Task::WORKSHOP_EXTERNAL)->cost
+                    'approved' =>  $approved
                 ]);
             }
             $pending_task = new PendingTask();
@@ -128,7 +133,11 @@ class AldController extends Controller
             }
             $taskDescription = $this->taskRepository->getById([], $pending_task->task_id);
             $pending_task->duration = $taskDescription['duration'];
-            $pending_task->approved = Task::find($request->input('task_id'))->cost;
+
+            if (Task::find($request->input('task_id'))->cost > 0) {
+                $approved = 0;
+            }
+            $pending_task->approved = $approved;
 
             if ($request->input('state_pending_task_id') == StatePendingTask::FINISHED) {
                 $pending_task->state_pending_task_id = StatePendingTask::FINISHED;
